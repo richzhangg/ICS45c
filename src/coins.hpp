@@ -71,7 +71,7 @@ Coins ask_for_coins(std::ostream& out, std::istream& in);
 
 // Presents a coins menu in 'out' and reads input from 'in'. This should handle deposits,
 // extractions, and printing the balance. For precise requirements see homework writeup!
-void coins_menu(std::ostream& in, std::ostream& out);
+void coins_menu(std::istream& in, std::ostream& out);
 
 #endif // End of the include guard.
 

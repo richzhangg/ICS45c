@@ -103,7 +103,7 @@ Coins ask_for_coins(std::ostream& out, std::istream& in) {
 }
 
 // The menu interface for user interaction
-void coins_menu(std::ostream& out, std::istream& in) {
+void coins_menu(std::istream& in, std::ostream& out) {
     Coins myCoins(0, 0, 0, 0); // Initialize a Coins object with no coins
     
     char choice;

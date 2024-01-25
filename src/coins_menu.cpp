@@ -5,5 +5,6 @@
 using namespace std;
 
 int main() {
-	coins_menu(cin, cout);
+	coins_menu(std::cin, std::cout);
+	return 0;
 }
