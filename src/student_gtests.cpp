@@ -53,7 +53,9 @@ TEST(WordCount, CountWords) {
     auto word_counts3 = count_words(test_input3, stopwords1);
     EXPECT_TRUE(word_counts3.empty());
 
-   
+	std::istringstream test_input4("apple! cherry? apple;");
+    auto word_counts4 = count_words(test_input4, {});
+    EXPECT_EQ(word_counts4["cherry?"], 1);
 }
 
 TEST(WordCount, OutputWordCounts) {
