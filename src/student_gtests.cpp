@@ -38,33 +38,33 @@ TEST(WordCount, LoadStopWords) {
 
 TEST(WordCount, CountWords) {
     // Your test for count_words
-    std::istringstream test_input1("apple apple banana apple cherry banana");
-    std::set<std::string> stopwords1 = {"banana"};
+    std::istringstream test_input1("dummy dummy  uhhh dummy something uhhh");
+    std::set<std::string> stopwords1 = {"uhhh"};
     auto word_counts1 = count_words(test_input1, stopwords1);
-    EXPECT_EQ(word_counts1["apple"], 3);
-    EXPECT_EQ(word_counts1["cherry"], 1);
-    EXPECT_EQ(word_counts1.count("banana"), 0);
+    EXPECT_EQ(word_counts1["dummy"], 3);
+    EXPECT_EQ(word_counts1["something"], 1);
+    EXPECT_EQ(word_counts1.count("uhhh"), 0);
 
     std::istringstream test_input2("");
     auto word_counts2 = count_words(test_input2, stopwords1);
     EXPECT_TRUE(word_counts2.empty());
 
-    std::istringstream test_input3("banana banana banana");
+    std::istringstream test_input3("uhhh uhhh uhhh");
     auto word_counts3 = count_words(test_input3, stopwords1);
     EXPECT_TRUE(word_counts3.empty());
 
-	std::istringstream test_input4("apple! cherry?");
+	std::istringstream test_input4("dummy! something?");
     auto word_counts4 = count_words(test_input4, {});
-    EXPECT_EQ(word_counts4["apple!"], 1);
-    EXPECT_EQ(word_counts4["cherry?"], 1);
+    EXPECT_EQ(word_counts4["dummy!"], 1);
+    EXPECT_EQ(word_counts4["something?"], 1);
 }
 
 TEST(WordCount, OutputWordCounts) {
     // Your test for output_word_counts
-	std::map<std::string, int> word_counts1 = {{"apple", 3}, {"cherry", 1}};
+	std::map<std::string, int> word_counts1 = {{"dummy", 3}, {"something", 1}};
     std::ostringstream test_output1;
     output_word_counts(word_counts1, test_output1);
-    std::string expected_output1 = "apple 3\ncherry 1\n";
+    std::string expected_output1 = "dummy 3\nsomething 1\n";
     EXPECT_EQ(test_output1.str(), expected_output1);
 
     std::map<std::string, int> word_counts2;
@@ -72,10 +72,10 @@ TEST(WordCount, OutputWordCounts) {
     output_word_counts(word_counts2, test_output2);
     EXPECT_TRUE(test_output2.str().empty());
 
-    std::map<std::string, int> word_counts3 = {{"apple!", 2}, {"cherry?", 1}};
+    std::map<std::string, int> word_counts3 = {{"dummy!", 2}, {"something?", 1}};
     std::ostringstream test_output3;
     output_word_counts(word_counts3, test_output3);
-    std::string expected_output3 = "apple! 2\ncherry? 1\n";
+    std::string expected_output3 = "dummy! 2\nsomething? 1\n";
     EXPECT_EQ(test_output3.str(), expected_output3);
 }
 
