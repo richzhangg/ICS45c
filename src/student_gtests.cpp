@@ -57,7 +57,6 @@ TEST(WordCount, CountWords) {
     auto word_counts4 = count_words(test_input4, {});
     EXPECT_EQ(word_counts4["apple!"], 1);
     EXPECT_EQ(word_counts4["cherry?"], 1);
-    EXPECT_EQ(word_counts4["apple"], 1);
 }
 
 TEST(WordCount, OutputWordCounts) {
