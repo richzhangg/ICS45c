@@ -28,6 +28,9 @@ std::map<std::string, int> count_words(std::istream& document, const std::set<st
     while (document >> word) {
         to_lowercase(word);
         // Check if the word is not a stop word
+		word.erase(std::remove_if(word.begin(), word.end(),
+                                  [](char c) { return !std::isalpha(c); }),
+                   word.end());
         if (!stopwords.count(word)) {
             word_counts[word]++;
         }
