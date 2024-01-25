@@ -118,34 +118,34 @@ void coins_menu(std::istream& in, std::ostream& out) {
         
         switch(choice) {
             case '1': {
-                out << "Enter the coins to deposit:\n";
                 Coins deposit = ask_for_coins(out, in);
                 myCoins.deposit_coins(deposit);
-                out << "Deposited " << deposit << "\n";
+                out << "Thank you!";
+				out << "\n";
                 break;
             }
             case '2': {
-                out << "Enter the coins to extract:\n";
                 Coins extraction = ask_for_coins(out, in);
                 if (myCoins.has_exact_change_for_coins(extraction)) {
-                    Coins extracted = myCoins.extract_exact_change(extraction);
-                    out << "Extracted " << extracted << "\n";
+                    myCoins.extract_exact_change(extraction);	
+					out << "Thank you!";
+					out << "\n";
                 } else {
-                    out << "Insufficient coins to extract the desired amount.\n";
+                    out << "ERROR: Insufficient Funds\n";
                 }
                 break;
             }
             case '3': {
-                out << "Current balance: ";
                 print_cents(myCoins.total_value_in_cents(), out);
                 out << "\n";
+				out << "Thank you!";
+				out << "\n";
                 break;
             }
             case '4':
-                out << "Exiting.\n";
                 break;
             default:
-                out << "Invalid choice, please try again.\n";
+                out << "ERROR: Invalid Command\n";
         }
     } while (choice != '4');
 }
