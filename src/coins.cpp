@@ -128,7 +128,7 @@ void coins_menu(std::istream& in, std::ostream& out) {
                 out << "Enter the coins to extract:\n";
                 Coins extraction = ask_for_coins(out, in);
                 if (myCoins.has_exact_change_for_coins(extraction)) {
-                    Coins extracted = myCoins.extract_change(extraction);
+                    Coins extracted = myCoins.extract_exact_change(extraction);
                     out << "Extracted " << extracted << "\n";
                 } else {
                     out << "Insufficient coins to extract the desired amount.\n";
