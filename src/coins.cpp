@@ -17,10 +17,7 @@ int Coins::total_value_in_cents() const {
 
 // Print the coins in the format "x quarters, y dimes, z nickels, n pennies"
 void Coins::print(std::ostream& out) const {
-    out << "Quarters? " << quarters << "\n";
-    out << "Dimes? " << dimes << "\n";
-    out << "Nickels? " << nickels << "\n";
-    out << "Pennies? " << pennies << "\n";
+    out << quarters << " quarters, " << dimes << " dimes, " << nickels << " nickels, " << pennies << " pennies";
 }
 
 // Overload the insertion operator to use the print method
