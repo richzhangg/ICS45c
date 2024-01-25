@@ -29,7 +29,7 @@ public:
     // Removes from 'this' Coins object the specific number of each type of coin given in 'coins' and
     // returns a 'Coins' object representing the coins that were extracted.
     // For any invalid extraction requests, return an empty Coins object (i.e. 0 of all coins).
-    Coins extract_change(Coins& coins);
+    Coins extract_exact_change(Coins& coins);
 
     // Returns how many cents the coins in 'this' object total, e.g., 1,1,1,1 returns 41.
     int total_value_in_cents() const;

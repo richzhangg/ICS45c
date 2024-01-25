@@ -49,7 +49,7 @@ bool Coins::has_exact_change_for_coins(const Coins& coins) const {
 }
 
 // Extract exact change if possible and return a new Coins object with the extracted coins
-Coins Coins::extract_change(Coins& coins) {
+Coins Coins::extract_exact_change(Coins& coins) {
     if (has_exact_change_for_coins(coins)) {
         quarters -= coins.quarters;
         dimes -= coins.dimes;

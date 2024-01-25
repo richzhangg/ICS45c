@@ -12,7 +12,7 @@ int main() {
     // Simulate buying chips
     int chipsCost = 149; // Cost in cents
     Coins costForChips = coins_required_for_cents(chipsCost);
-    Coins coinsUsedForChips = pocket.extract_change(costForChips);
+    Coins coinsUsedForChips = pocket.extract_exact_change(costForChips);
     cout << "Bought chips using pocket" << endl;
     cout << "Chips required the coins: " << coinsUsedForChips << endl;
     cout << "Pocket after paying for chips: " << pocket << endl;
@@ -20,7 +20,7 @@ int main() {
     // Transfer money to pocket from piggy bank
     int transferAmount = 405; // Amount in cents
 	Coins extractedCoins = coins_required_for_cents(transferAmount);
-    Coins coinsToTransfer = piggyBank.extract_change(extractedCoins);
+    Coins coinsToTransfer = piggyBank.extract_exact_change(extractedCoins);
     pocket.deposit_coins(coinsToTransfer);
     cout << "Transferring money to pocket" << endl;
     cout << "Coins for transfer: " << coinsToTransfer << endl;
