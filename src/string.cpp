@@ -132,7 +132,7 @@ const char *String::strstr(const char *haystack, const char *needle) {
     return nullptr;
 }
 
-int String::size() {
+int String::size() const{
     return strlen(buf);
 }
 
@@ -172,7 +172,7 @@ bool String::operator>=(const String &s) const {
     return !(*this < s);
 }
 
-int String::indexOf(char c) {
+int String::indexOf(char c) const{
     const char *result = strchr(buf, c);
     if (result != nullptr) {
         return result - buf;
@@ -180,7 +180,7 @@ int String::indexOf(char c) {
     return -1;
 }
 
-int String::indexOf(const String &s) {
+int String::indexOf(const String &s) const{
     const char *found = strstr(buf, s.buf);
     if (found) {
         return found - buf;
@@ -188,7 +188,7 @@ int String::indexOf(const String &s) {
     return -1;
 }
 
-String String::reverse() {
+String String::reverse() const{
     char temp[MAXLEN];
     int len = strlen(buf);
     for (int i = 0; i < len; ++i) {
@@ -198,7 +198,7 @@ String String::reverse() {
     return String(temp);
 }
 
-String String::operator+(const String &s) {
+String String::operator+(const String &s) const{
     String result;
     strncpy(result.buf, this->buf, MAXLEN - 1);
     strncat(result.buf, s.buf, MAXLEN - strlen(result.buf) - 1);
