@@ -40,44 +40,33 @@ char *String::strcpy(char *dest, const char *src) {
 char *String::strncpy(char *dest, const char *src, int n) {
     int i = 0;
     for (; i < n && src[i] != '\0'; ++i) {
-    int i;
-    for (i = 0; i < n && src[i] != '\0'; i++) {
         dest[i] = src[i];
     }
     for (; i < n; ++i) {
-    for (; i < n; i++) {
         dest[i] = '\0';
     }
     return dest;
-@@ -58,83 +58,79 @@ char *String::strncpy(char *dest, const char *src, int n) {
+	@@ -58,83 +58,79 @@ char *String::strncpy(char *dest, const char *src, int n) {
 int String::strcmp(const char *left, const char *right) {
     int i = 0;
     while (left[i] == right[i]) {
         if (left[i] == '\0') {
             return 0;
         }
-        if (left[i] == '\0') return 0;
         i++;
     }
     return left[i] - right[i];
-    return (unsigned char)left[i] - (unsigned char)right[i];
 }
-
 
 char *String::strncat(char *dest, const char *src, int n) {
     int destLen = strlen(dest);
-    int dest_len = strlen(dest);
     int i;
     for (i = 0; src[i] != '\0' && i < n; ++i) {
         dest[destLen + i] = src[i];
-    for (i = 0; i < n && src[i] != '\0'; i++) {
-        dest[dest_len + i] = src[i];
     }
     dest[destLen + i] = '\0';
-    dest[dest_len + i] = '\0';
     return dest;
 }
-
 
 char *String::strcat(char *dest, const char *src) {
     int destLen = strlen(dest);
@@ -85,38 +74,27 @@ char *String::strcat(char *dest, const char *src) {
     while (src[i] != '\0') {
         dest[destLen + i] = src[i];
         i++;
-    int dest_len = strlen(dest);
-    int i;
-    for (i = 0; src[i] != '\0'; i++) {
-        dest[dest_len + i] = src[i];
     }
     dest[destLen + i] = '\0';
-    dest[dest_len + i] = '\0';
     return dest;
 }
-
 
 int String::strncmp(const char *left, const char *right, int n) {
     for (int i = 0; i < n; ++i) {
         if (left[i] != right[i] || left[i] == '\0' || right[i] == '\0') {
             return left[i] - right[i];
         }
-    for (int i = 0; i < n; i++) {
-        if (left[i] != right[i] || left[i] == '\0') return (unsigned char)left[i] - (unsigned char)right[i];
     }
     return 0;
 }
 
-
 void String::reverse_cpy(char *dest, const char *src) {
     int len = strlen(src);
     for (int i = 0; i < len; ++i) {
-    for (int i = 0; i < len; i++) {
         dest[i] = src[len - 1 - i];
     }
     dest[len] = '\0';
 }
-
 
 
 const char *String::strchr(const char *str, char c) {
@@ -126,13 +104,7 @@ const char *String::strchr(const char *str, char c) {
         }
     } while (*str++);
     return nullptr;
-    while (*str != '\0') {
-        if (*str == c) return str;
-        str++;
-    }
-    return (c == '\0') ? str : nullptr;
 }
-
 
 
 const char *String::strstr(const char *haystack, const char *needle) {
@@ -150,20 +122,10 @@ const char *String::strstr(const char *haystack, const char *needle) {
             if (!*n) {
                 return haystack;
             }
-    if (*needle == '\0') return haystack;
-    while (*haystack) {
-        const char *h = haystack;
-        const char *n = needle;
-        while (*n && *h == *n) {
-            h++;
-            n++;
         }
-        if (*n == '\0') return haystack;
-        haystack++;
     }
     return nullptr;
 }
-
 
 int String::size() const{
     return strlen(buf);
