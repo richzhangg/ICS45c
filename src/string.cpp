@@ -1,31 +1,25 @@
 #include "string.hpp"
 #include <iostream>
 #include <cstring>
-
 String::String(const char *s) {
     strncpy(buf, s, MAXLEN - 1);
     buf[MAXLEN - 1] = '\0';
 }
-
 String::String(const String &s) {
     strcpy(buf, s.buf);
 }
-
 bool String::in_bounds(int i) const {
     return i >= 0 && i < strlen(buf);
 }
-
 String &String::operator=(const String &s) {
     if (this != &s) {
         strcpy(buf, s.buf);
     }
     return *this;
 }
-
 String::~String() {
     std::cout << "String " << buf << " is destructing" << std::endl;
 }
-
 int String::strlen(const char *s) {
     int length = 0;
     while (s[length] != '\0') {
@@ -33,7 +27,6 @@ int String::strlen(const char *s) {
     }
     return length;
 }
-
 char *String::strcpy(char *dest, const char *src) {
     int i = 0;
     while (src[i] != '\0') {
@@ -45,49 +38,69 @@ char *String::strcpy(char *dest, const char *src) {
 }
 
 char *String::strncpy(char *dest, const char *src, int n) {
+    int i = 0;
+    for (; i < n && src[i] != '\0'; ++i) {
     int i;
     for (i = 0; i < n && src[i] != '\0'; i++) {
         dest[i] = src[i];
     }
+    for (; i < n; ++i) {
     for (; i < n; i++) {
         dest[i] = '\0';
     }
     return dest;
-}
-
+@@ -58,83 +58,79 @@ char *String::strncpy(char *dest, const char *src, int n) {
 int String::strcmp(const char *left, const char *right) {
     int i = 0;
     while (left[i] == right[i]) {
+        if (left[i] == '\0') {
+            return 0;
+        }
         if (left[i] == '\0') return 0;
         i++;
     }
+    return left[i] - right[i];
     return (unsigned char)left[i] - (unsigned char)right[i];
 }
 
 
 char *String::strncat(char *dest, const char *src, int n) {
+    int destLen = strlen(dest);
     int dest_len = strlen(dest);
     int i;
+    for (i = 0; src[i] != '\0' && i < n; ++i) {
+        dest[destLen + i] = src[i];
     for (i = 0; i < n && src[i] != '\0'; i++) {
         dest[dest_len + i] = src[i];
     }
+    dest[destLen + i] = '\0';
     dest[dest_len + i] = '\0';
     return dest;
 }
 
 
 char *String::strcat(char *dest, const char *src) {
+    int destLen = strlen(dest);
+    int i = 0;
+    while (src[i] != '\0') {
+        dest[destLen + i] = src[i];
+        i++;
     int dest_len = strlen(dest);
     int i;
     for (i = 0; src[i] != '\0'; i++) {
         dest[dest_len + i] = src[i];
     }
+    dest[destLen + i] = '\0';
     dest[dest_len + i] = '\0';
     return dest;
 }
 
 
 int String::strncmp(const char *left, const char *right, int n) {
+    for (int i = 0; i < n; ++i) {
+        if (left[i] != right[i] || left[i] == '\0' || right[i] == '\0') {
+            return left[i] - right[i];
+        }
     for (int i = 0; i < n; i++) {
         if (left[i] != right[i] || left[i] == '\0') return (unsigned char)left[i] - (unsigned char)right[i];
     }
@@ -97,6 +110,7 @@ int String::strncmp(const char *left, const char *right, int n) {
 
 void String::reverse_cpy(char *dest, const char *src) {
     int len = strlen(src);
+    for (int i = 0; i < len; ++i) {
     for (int i = 0; i < len; i++) {
         dest[i] = src[len - 1 - i];
     }
@@ -106,6 +120,12 @@ void String::reverse_cpy(char *dest, const char *src) {
 
 
 const char *String::strchr(const char *str, char c) {
+    do {
+        if (*str == c) {
+            return str;
+        }
+    } while (*str++);
+    return nullptr;
     while (*str != '\0') {
         if (*str == c) return str;
         str++;
@@ -116,6 +136,20 @@ const char *String::strchr(const char *str, char c) {
 
 
 const char *String::strstr(const char *haystack, const char *needle) {
+    if (!*needle) {
+        return haystack;
+    }
+
+    for (; *haystack; ++haystack) {
+        if (*haystack == *needle) {
+            const char *h = haystack, *n = needle;
+            while (*h && *n && *h == *n) {
+                ++h;
+                ++n;
+            }
+            if (!*n) {
+                return haystack;
+            }
     if (*needle == '\0') return haystack;
     while (*haystack) {
         const char *h = haystack;
@@ -134,54 +168,47 @@ const char *String::strstr(const char *haystack, const char *needle) {
 int String::size() const{
     return strlen(buf);
 }
-
 void String::print(std::ostream &out) const {
     out << buf;
 }
-
 void String::read(std::istream &in) {
     char temp[MAXLEN];
     in >> temp;
     strncpy(buf, temp, MAXLEN - 1);
     buf[MAXLEN - 1] = '\0';
 }
-
-
-bool String::operator<(const String &s) const {
-    return strcmp(buf, s.buf) < 0;
-}
-
-bool String::operator>(const String &s) const {
-    return strcmp(buf, s.buf) > 0;
-}
-
-bool String::operator<=(const String &s) const {
-    return strcmp(buf, s.buf) <= 0;
-}
-
-bool String::operator>=(const String &s) const {
-    return strcmp(buf, s.buf) >= 0;
-}
-
 bool String::operator==(const String &s) const {
     return strcmp(buf, s.buf) == 0;
 }
-
 bool String::operator!=(const String &s) const {
     return !(*this == s);
 }
-
-int String::indexOf(char c) const {
-    const char *found = strchr(buf, c);
-    return (found) ? found - buf : -1;
+bool String::operator<(const String &s) const {
+    return strcmp(buf, s.buf) < 0;
 }
-
-int String::indexOf(const String &s) const {
+bool String::operator>(const String &s) const {
+    return strcmp(buf, s.buf) > 0;
+}
+bool String::operator<=(const String &s) const {
+    return !(*this > s);
+}
+bool String::operator>=(const String &s) const {
+    return !(*this < s);
+}
+int String::indexOf(char c) const{
+    const char *result = strchr(buf, c);
+    if (result != nullptr) {
+        return result - buf;
+    }
+    return -1;
+}
+int String::indexOf(const String &s) const{
     const char *found = strstr(buf, s.buf);
-    return (found) ? found - buf : -1;
+    if (found) {
+        return found - buf;
+    }
+    return -1;
 }
-
-
 String String::reverse() const{
     char temp[MAXLEN];
     int len = strlen(buf);
@@ -191,20 +218,24 @@ String String::reverse() const{
     temp[len] = '\0';
     return String(temp);
 }
-
 String String::operator+(const String &s) const{
     String result;
     strncpy(result.buf, this->buf, MAXLEN - 1);
     strncat(result.buf, s.buf, MAXLEN - strlen(result.buf) - 1);
     return result;
 }
-
 String &String::operator+=(const String &s) {
-    strncat(this->buf, s.buf, MAXLEN - strlen(this->buf) - 1);
+    if (this == &s) {
+        char temp[MAXLEN];
+        strncpy(temp, this->buf, MAXLEN - 1);
+        temp[MAXLEN - 1] = '\0';
+        strncat(temp, s.buf, MAXLEN - strlen(temp) - 1);
+        strncpy(this->buf, temp, MAXLEN - 1);
+    } else {
+        strncat(this->buf, s.buf, MAXLEN - strlen(this->buf) - 1);
+    }
     return *this;
 }
-
-
 char &String::operator[](int index) {
     if (!in_bounds(index)) {
         std::cout << "ERROR: Index Out Of Bounds" << std::endl;
@@ -213,15 +244,10 @@ char &String::operator[](int index) {
     }
     return buf[index];
 }
-
-
-
 std::ostream &operator<<(std::ostream &out, const String &s) {
-    out << s.buf;
+    s.print(out);
     return out;
 }
-
-
 std::istream &operator>>(std::istream &in, String &s) {
    char temp[MAXLEN];
     in >> temp;
@@ -229,4 +255,3 @@ std::istream &operator>>(std::istream &in, String &s) {
     s = tempString;
     return in;
 }
-
