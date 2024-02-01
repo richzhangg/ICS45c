@@ -212,7 +212,7 @@ String &String::operator+=(const String &s) {
 
 char &String::operator[](int index) {
     if (!in_bounds(index)) {
-        std::cerr << "ERROR: Index Out Of Bounds" << std::endl;
+        std::cout << "ERROR: Index Out Of Bounds" << std::endl;
         static char errorChar = '\0';
         return errorChar;
     }
