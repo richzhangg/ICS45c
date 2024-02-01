@@ -2,18 +2,15 @@
 #include <iostream>
 #include <cstring>
 
-// Constructor: Constructs string from a C string
 String::String(const char *s) {
     strncpy(buf, s, MAXLEN - 1);
-    buf[MAXLEN - 1] = '\0'; // Ensure null termination
+    buf[MAXLEN - 1] = '\0';
 }
 
-// Copy Constructor
 String::String(const String &s) {
     strcpy(buf, s.buf);
 }
 
-// Assignment Operator
 String &String::operator=(const String &s) {
     if (this != &s) {
         strcpy(buf, s.buf);
@@ -21,14 +18,10 @@ String &String::operator=(const String &s) {
     return *this;
 }
 
-// Destructor
 String::~String() {
     std::cout << "String " << buf << " is destructing" << std::endl;
 }
 
-// Static Helper Methods
-
-// strlen: Calculate length of string
 int String::strlen(const char *s) {
     int length = 0;
     while (s[length] != '\0') {
@@ -37,7 +30,6 @@ int String::strlen(const char *s) {
     return length;
 }
 
-// strcpy: Copy string
 char *String::strcpy(char *dest, const char *src) {
     int i = 0;
     while (src[i] != '\0') {
@@ -48,7 +40,6 @@ char *String::strcpy(char *dest, const char *src) {
     return dest;
 }
 
-// strncpy: Copy characters of one string to another
 char *String::strncpy(char *dest, const char *src, int n) {
     int i = 0;
     for (; src[i] != '\0' && i < n; i++) {
@@ -60,7 +51,6 @@ char *String::strncpy(char *dest, const char *src, int n) {
     return dest;
 }
 
-// strcmp: Compare two strings
 int String::strcmp(const char *left, const char *right) {
     int i = 0;
     while (left[i] == right[i]) {
@@ -72,7 +62,16 @@ int String::strcmp(const char *left, const char *right) {
     return left[i] - right[i];
 }
 
-// strchr: Locate character in string
+char *String::strncat(char *dest, const char *src, int n) {
+    int destLen = strlen(dest);
+    int i;
+    for (i = 0; src[i] != '\0' && i < n; ++i) {
+        dest[destLen + i] = src[i];
+    }
+    dest[destLen + i] = '\0';
+    return dest;
+}
+
 const char *String::strchr(const char *str, char c) {
     while (*str != '\0') {
         if (*str == c) {
@@ -83,7 +82,6 @@ const char *String::strchr(const char *str, char c) {
     return nullptr;
 }
 
-// strstr: Locate substring in string
 const char *String::strstr(const char *haystack, const char *needle) {
     if (!*needle) {
         return haystack;
@@ -104,12 +102,14 @@ const char *String::strstr(const char *haystack, const char *needle) {
     return nullptr;
 }
 
-// size: Returns the logical length of this string
 int String::size() {
     return strlen(buf);
 }
 
-// Relational Operators
+void String::print(std::ostream &out) const {
+    out << buf;
+}
+
 
 bool String::operator==(const String &s) const {
     return strcmp(buf, s.buf) == 0;
@@ -135,25 +135,22 @@ bool String::operator>=(const String &s) const {
     return !(*this < s);
 }
 
-// IndexOf Method for char
 int String::indexOf(char c) {
     const char *result = strchr(buf, c);
     if (result != nullptr) {
-        return result - buf; // Pointer arithmetic to find index
+        return result - buf;
     }
-    return -1; // Character not found
+    return -1;
 }
 
-// IndexOf Method for String
 int String::indexOf(const String &s) {
     const char *found = strstr(buf, s.buf);
     if (found) {
-        return found - buf;  // Pointer arithmetic
+        return found - buf;
     }
-    return -1;  // Not found
+    return -1;
 }
 
-// Reverse Method
 String String::reverse() {
     char temp[MAXLEN];
     int len = strlen(buf);
@@ -164,7 +161,6 @@ String String::reverse() {
     return String(temp);
 }
 
-// Concatenation: operator+
 String String::operator+(const String &s) {
     String result;
     strncpy(result.buf, this->buf, MAXLEN - 1);
@@ -172,33 +168,29 @@ String String::operator+(const String &s) {
     return result;
 }
 
-// Concatenation: operator+=
 String &String::operator+=(const String &s) {
     strncat(this->buf, s.buf, MAXLEN - strlen(this->buf) - 1);
     return *this;
 }
 
-// Indexing: operator[]
 char &String::operator[](int index) {
     if (!in_bounds(index)) {
         std::cerr << "ERROR: Index Out Of Bounds" << std::endl;
-        return buf[0]; // Return first character as a fallback
+        return buf[0];
     }
     return buf[index];
 }
 
-// Stream Insertion Operator
 std::ostream &operator<<(std::ostream &out, const String &s) {
-    out << s.buf;
+    s.print(out);
     return out;
 }
 
-// Stream Extraction Operator
 std::istream &operator>>(std::istream &in, String &s) {
-    char temp[String::MAXLEN];
+   char temp[MAXLEN];
     in >> temp;
-    String::strncpy(s.buf, temp, String::MAXLEN - 1);
-    s.buf[String::MAXLEN - 1] = '\0';
+    String tempString(temp);
+    s = tempString;
     return in;
 }
 

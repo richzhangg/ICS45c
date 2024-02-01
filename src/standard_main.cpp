@@ -13,7 +13,7 @@ int main()
 	String fifthString = String();
 	cout << "+: " << firstString + secondString << endl;
 	cout << "+=: " << (firstString += secondString) << endl;
-	cout << "indexOf(String): "<< firstString.indexOf(secondString) << endl;
+	cout << "indexOf(String): " << firstString.indexOf(secondString) << endl;
 	cout << "indexOf(char): " << firstString.indexOf('t') << endl;
 	cout << "LT: " << (secondString < firstString) << endl;
 	cout << "GT: " << (secondString > firstString) << endl;
