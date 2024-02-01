@@ -139,6 +139,13 @@ void String::print(std::ostream &out) const {
     out << buf;
 }
 
+void String::read(std::istream &in) {
+    char temp[MAXLEN];
+    in >> temp;
+    strncpy(buf, temp, MAXLEN - 1);
+    buf[MAXLEN - 1] = '\0';
+}
+
 
 bool String::operator==(const String &s) const {
     return strcmp(buf, s.buf) == 0;
