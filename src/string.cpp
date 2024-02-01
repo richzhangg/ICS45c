@@ -206,9 +206,18 @@ String String::operator+(const String &s) {
 }
 
 String &String::operator+=(const String &s) {
-    strncat(this->buf, s.buf, MAXLEN - strlen(this->buf) - 1);
+    if (this == &s) {
+        char temp[MAXLEN];
+        strncpy(temp, this->buf, MAXLEN - 1);
+        temp[MAXLEN - 1] = '\0';
+        strncat(temp, s.buf, MAXLEN - strlen(temp) - 1);
+        strncpy(this->buf, temp, MAXLEN - 1);
+    } else {
+        strncat(this->buf, s.buf, MAXLEN - strlen(this->buf) - 1);
+    }
     return *this;
 }
+
 
 char &String::operator[](int index) {
     if (!in_bounds(index)) {
