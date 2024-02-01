@@ -13,6 +13,10 @@ public:
 	// construct this string as a copy of string s
 	String(const String &s);
 
+	bool in_bounds(int i) const {
+        return i >= 0 && i < strlen(buf);
+    }
+
 	// assignment operator from one string, s, to this string
 	String &operator=(const String &s);
 
