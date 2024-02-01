@@ -147,14 +147,6 @@ void String::read(std::istream &in) {
 }
 
 
-bool String::operator==(const String &s) const {
-    return strcmp(buf, s.buf) == 0;
-}
-
-bool String::operator!=(const String &s) const {
-    return !(*this == s);
-}
-
 bool String::operator<(const String &s) const {
     return strcmp(buf, s.buf) < 0;
 }
@@ -164,28 +156,31 @@ bool String::operator>(const String &s) const {
 }
 
 bool String::operator<=(const String &s) const {
-    return !(*this > s);
+    return strcmp(buf, s.buf) <= 0;
 }
 
 bool String::operator>=(const String &s) const {
-    return !(*this < s);
+    return strcmp(buf, s.buf) >= 0;
 }
 
-int String::indexOf(char c) const{
-    const char *result = strchr(buf, c);
-    if (result != nullptr) {
-        return result - buf;
-    }
-    return -1;
+bool String::operator==(const String &s) const {
+    return strcmp(buf, s.buf) == 0;
 }
 
-int String::indexOf(const String &s) const{
+bool String::operator!=(const String &s) const {
+    return !(*this == s);
+}
+
+int String::indexOf(char c) const {
+    const char *found = strchr(buf, c);
+    return (found) ? found - buf : -1;
+}
+
+int String::indexOf(const String &s) const {
     const char *found = strstr(buf, s.buf);
-    if (found) {
-        return found - buf;
-    }
-    return -1;
+    return (found) ? found - buf : -1;
 }
+
 
 String String::reverse() const{
     char temp[MAXLEN];
@@ -205,15 +200,7 @@ String String::operator+(const String &s) const{
 }
 
 String &String::operator+=(const String &s) {
-    if (this == &s) {
-        char temp[MAXLEN];
-        strncpy(temp, this->buf, MAXLEN - 1);
-        temp[MAXLEN - 1] = '\0';
-        strncat(temp, s.buf, MAXLEN - strlen(temp) - 1);
-        strncpy(this->buf, temp, MAXLEN - 1);
-    } else {
-        strncat(this->buf, s.buf, MAXLEN - strlen(this->buf) - 1);
-    }
+    strncat(this->buf, s.buf, MAXLEN - strlen(this->buf) - 1);
     return *this;
 }
 
@@ -230,9 +217,10 @@ char &String::operator[](int index) {
 
 
 std::ostream &operator<<(std::ostream &out, const String &s) {
-    s.print(out);
+    out << s.buf;
     return out;
 }
+
 
 std::istream &operator>>(std::istream &in, String &s) {
    char temp[MAXLEN];
