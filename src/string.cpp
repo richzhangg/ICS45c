@@ -84,8 +84,8 @@ char *String::strcat(char *dest, const char *src) {
 }
 
 int String::strncmp(const char *left, const char *right, int n) {
-    for (int i = 0; i < n && left[i] != '\0' && right[i] != '\0'; i++) {
-        if (left[i] != right[i]) {
+    for (int i = 0; i < n; ++i) {
+        if (left[i] != right[i] || left[i] == '\0' || right[i] == '\0') {
             return left[i] - right[i];
         }
     }
