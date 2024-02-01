@@ -72,6 +72,35 @@ char *String::strncat(char *dest, const char *src, int n) {
     return dest;
 }
 
+char *String::strcat(char *dest, const char *src) {
+    int destLen = strlen(dest);
+    int i = 0;
+    while (src[i] != '\0') {
+        dest[destLen + i] = src[i];
+        i++;
+    }
+    dest[destLen + i] = '\0';
+    return dest;
+}
+
+int String::strncmp(const char *left, const char *right, int n) {
+    for (int i = 0; i < n && left[i] != '\0' && right[i] != '\0'; i++) {
+        if (left[i] != right[i]) {
+            return left[i] - right[i];
+        }
+    }
+    return 0;
+}
+
+void String::reverse_cpy(char *dest, const char *src) {
+    int len = strlen(src);
+    for (int i = 0; i < len; ++i) {
+        dest[i] = src[len - 1 - i];
+    }
+    dest[len] = '\0';
+}
+
+
 const char *String::strchr(const char *str, char c) {
     while (*str != '\0') {
         if (*str == c) {
