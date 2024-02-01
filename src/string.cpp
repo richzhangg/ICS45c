@@ -7,12 +7,12 @@ String::String(const char *s) {
     buf[MAXLEN - 1] = '\0';
 }
 
-bool String::in_bounds(int i) const {
-    return i >= 0 && i < strlen(buf);
-}
-
 String::String(const String &s) {
     strcpy(buf, s.buf);
+}
+
+bool String::in_bounds(int i) const {
+    return i >= 0 && i < strlen(buf);
 }
 
 String &String::operator=(const String &s) {
