@@ -217,6 +217,7 @@ char &String::operator[](int index) {
     return buf[index];
 }
 
+
 std::ostream &operator<<(std::ostream &out, const String &s) {
     s.print(out);
     return out;
