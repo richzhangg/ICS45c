@@ -42,10 +42,10 @@ char *String::strcpy(char *dest, const char *src) {
 
 char *String::strncpy(char *dest, const char *src, int n) {
     int i = 0;
-    for (; src[i] != '\0' && i < n; i++) {
+    for (; i < n && src[i] != '\0'; ++i) {
         dest[i] = src[i];
     }
-    if (i < n) {
+    for (; i < n; ++i) {
         dest[i] = '\0';
     }
     return dest;
@@ -102,14 +102,14 @@ void String::reverse_cpy(char *dest, const char *src) {
 
 
 const char *String::strchr(const char *str, char c) {
-    while (*str != '\0') {
+    do {
         if (*str == c) {
             return str;
         }
-        str++;
-    }
+    } while (*str++);
     return nullptr;
 }
+
 
 const char *String::strstr(const char *haystack, const char *needle) {
     if (!*needle) {
@@ -212,10 +212,12 @@ String &String::operator+=(const String &s) {
 char &String::operator[](int index) {
     if (!in_bounds(index)) {
         std::cerr << "ERROR: Index Out Of Bounds" << std::endl;
-        return buf[0];
+        static char errorChar = '\0';
+        return errorChar;
     }
     return buf[index];
 }
+
 
 
 std::ostream &operator<<(std::ostream &out, const String &s) {
