@@ -42,14 +42,15 @@ char *String::strcpy(char *dest, const char *src) {
 
 char *String::strncpy(char *dest, const char *src, int n) {
     int i = 0;
-    for (; i < n && src[i] != '\0'; ++i) {
+    for (; src[i] != '\0' && i < n; ++i) {
         dest[i] = src[i];
     }
-    for (; i < n; ++i) {
+    if (i < n) {
         dest[i] = '\0';
     }
     return dest;
 }
+
 
 int String::strcmp(const char *left, const char *right) {
     int i = 0;
