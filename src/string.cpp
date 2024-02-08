@@ -20,7 +20,7 @@ String::String(const char* s) : buf(strdup(s)) {}
 String::String(const String& s) : buf(strdup(s.buf)) {}
 
 String::String(String&& other) noexcept : buf(other.buf) {
-    other.buf = nullptr; // Prevent the source object from deleting the memory.
+    other.buf = nullptr;
 }
 
 
@@ -40,18 +40,22 @@ String& String::operator=(const  String& other) {
 }
 
 String& String::operator=(String&& other) noexcept {
-    if (this != &other) { // Guard against self-assignment
-        delete[] buf; // Free the existing resource.
-        buf = other.buf; // Transfer ownership of the resource.
-        other.buf = nullptr; // Leave the source object in a valid state.
+    if (this != &other) {
+        delete[] buf;
+        buf = other.buf;
+        other.buf = nullptr;
     }
     return *this;
 }
 
 
 char& String::operator[](int index) {
+    if (index < 0 || index >= this->size()) {
+        std::cerr << "ERROR";
+    }
     return buf[index];
 }
+
 
 
 const char& String::operator[](int index) const {
@@ -229,7 +233,7 @@ void String::reverse_cpy(char *dest, const char *src) {
     for (int i = 0; i < len; ++i) {
         dest[i] = src[len - i - 1];
     }
-    dest[len] = '\0'; // Full match found, return start
+    dest[len] = '\0';
 }
 
 
