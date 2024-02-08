@@ -136,7 +136,7 @@ String String::operator+(const String& s) const {
 
 String& String::operator+=(const String& s) {
     size_t newLength = std::strlen(buf) + std::strlen(s.buf);
-    char* newBuf = new char[newLength + 1]; // +1 for null terminator
+    char* newBuf = new char[newLength + 1];
     std::strcpy(newBuf, buf);
     std::strcat(newBuf, s.buf);
     delete[] buf;
