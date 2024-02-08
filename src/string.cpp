@@ -202,7 +202,6 @@ int String::strncmp(const char *left, const char *right, int n) {
         if (*left != *right) {
             return *(const unsigned char *)left - *(const unsigned char *)right;
         } else if (!*left || !*right) {
-            // Reached the end of one string before reaching n characters.
             return *(const unsigned char *)left - *(const unsigned char *)right;
         }
         ++left;
@@ -222,14 +221,14 @@ void String::reverse_cpy(char *dest, const char *src) {
 
 
 const char *String::strchr(const char *str, char c) {
-    while (*str) {
+    do {
         if (*str == c) {
             return str;
         }
-        ++str;
-    }
+    } while (*str++);
     return nullptr;
 }
+
 
 
 const char *String::strstr(const char *haystack, const char *needle) {
