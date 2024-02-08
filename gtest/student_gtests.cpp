@@ -24,38 +24,56 @@ TEST(StringFunction, strcpy) {
 }
 
 TEST(StringFunction, strdup) {
-    EXPECT_TRUE(false);
+    char* duplicated = String::strdup("test");
+    EXPECT_STREQ(duplicated, "test");
+    delete[] duplicated; // Remember to deallocate memory to prevent memory leaks
 }
 
 TEST(StringFunction, strncpy) {
-    EXPECT_TRUE(false);
+    char destination[10] = {};
+    String::strncpy(destination, "hello", 5);
+    EXPECT_STREQ(destination, "hello");
 }
 
 TEST(StringFunction, strcat) {
-    EXPECT_TRUE(false);
+    char str[10] = "Hi";
+    String::strcat(str, " there");
+    EXPECT_STREQ(str, "Hi there");
 }
 
 TEST(StringFunction, strncat) {
-    EXPECT_TRUE(false);
+    char str[10] = "Hi";
+    String::strncat(str, " there", 3);
+    EXPECT_STREQ(str, "Hi th");
 }
 
 TEST(StringFunction, strcmp) {
-    EXPECT_TRUE(false);
+    EXPECT_EQ(String::strcmp("test", "test"), 0);
+    EXPECT_LT(String::strcmp("aaa", "bbb"), 0);
+    EXPECT_GT(String::strcmp("ccc", "bbb"), 0);
 }
 
 TEST(StringFunction, strncmp) {
-    EXPECT_TRUE(false);
+    EXPECT_EQ(String::strncmp("testing", "test", 4), 0);
+    EXPECT_LT(String::strncmp("aaa", "bbb", 3), 0);
+    EXPECT_GT(String::strncmp("ccc", "aaa", 3), 0);
 }
 
 TEST(StringFunction, reverse_cpy) {
-    EXPECT_TRUE(false);
+    char reversed[6];
+    String::reverse_cpy(reversed, "hello");
+    EXPECT_STREQ(reversed, "olleh");
 }
 
 TEST(StringFunction, strchr) {
-    EXPECT_TRUE(false);
+    const char* str = "Hello world";
+    EXPECT_EQ(String::strchr(str, 'w'), str + 6);
+    EXPECT_EQ(String::strchr(str, 'z'), nullptr);
 }
 
 TEST(StringFunction, strstr) {
-    EXPECT_TRUE(false);
+    const char* haystack = "Hello world";
+    EXPECT_EQ(String::strstr(haystack, "world"), haystack + 6);
+    EXPECT_EQ(String::strstr(haystack, "nothing"), nullptr);
 }
 
