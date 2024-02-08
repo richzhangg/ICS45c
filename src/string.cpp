@@ -134,10 +134,16 @@ String String::operator+(const String& s) const {
 }
 
 
-String& String::operator+=(String s) {
-    *this = *this + s;
+String& String::operator+=(const String& s) {
+    size_t newLength = std::strlen(buf) + std::strlen(s.buf);
+    char* newBuf = new char[newLength + 1]; // +1 for null terminator
+    std::strcpy(newBuf, buf);
+    std::strcat(newBuf, s.buf);
+    delete[] buf;
+    buf = newBuf;
     return *this;
 }
+
 
 void String::print(std::ostream& out) const {
     out << buf;

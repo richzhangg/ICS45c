@@ -54,7 +54,7 @@ public:
     String operator+(const String& s) const;
 
     // concatenate s onto the end of this string
-    String &operator+=(String s);
+    String& operator+=(const String& s);
 
     // print this string, hint: use operator << to send buf to out
     void print(std::ostream &out) const;
