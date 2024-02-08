@@ -59,7 +59,7 @@ TEST(StringFunction, strstr) {
     EXPECT_TRUE(false);
 }
 
-TEST(StringFunction, strdup) {
+TEST(StringFunction, strdup_BasicUsage) {
     const char* original = "Hello, World!";
     char* duplicate = String::strdup(original);
 
@@ -71,7 +71,7 @@ TEST(StringFunction, strdup) {
     delete[] duplicate;
 }
 
-TEST(StringFunction, strncpy) {
+TEST(StringFunction, strncpy_EdgeCase) {
     char dest[6] = {}; // Ensure it's large enough and initialized to zeros
     const char* src = "Hello";
     String::strncpy(dest, src, 5);
@@ -88,26 +88,26 @@ TEST(StringFunction, strncpy) {
     EXPECT_EQ(dest3[3], '\0');
 }
 
-TEST(StringFunction, strcat) {
+TEST(StringFunction, strcat_Basic) {
     char dest[11] = "Hello";
     String::strcat(dest, ", World");
     EXPECT_STREQ(dest, "Hello, World");
 }
 
-TEST(StringFunction, strncat) {
+TEST(StringFunction, strncat_Basic) {
     char dest[11] = "Hello";
     String::strncat(dest, ", World", 6);
     // Only ", Wor" should be concatenated due to the length limit
     EXPECT_STREQ(dest, "Hello, Wor");
 }
 
-TEST(StringFunction, strcmp) {
+TEST(StringFunction, strcmp_Basic) {
     EXPECT_EQ(String::strcmp("abc", "abc"), 0);
     EXPECT_LT(String::strcmp("abc", "bcd"), 0);
     EXPECT_GT(String::strcmp("bcd", "abc"), 0);
 }
 
-TEST(StringFunction, strncmp) {
+TEST(StringFunction, strncmp_Basic) {
     EXPECT_EQ(String::strncmp("abcde", "abcff", 3), 0);
     EXPECT_LT(String::strncmp("abc", "bcd", 2), 0);
     EXPECT_GT(String::strncmp("bcd", "abc", 2), 0);
