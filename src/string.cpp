@@ -235,20 +235,19 @@ const char *String::strstr(const char *haystack, const char *needle) {
     if (!*needle) {
         return haystack;
     }
-    const char *p1;
-    const char *p2;
-    const char *p1_advance = haystack;
-    for (p1 = haystack, p2 = needle; *p1 && *p2; p1++, p2++) {
-        if (*p1 != *p2) {
-            p2 = needle;
-            if (!*p1_advance) {
-                return nullptr;
+    for (const char *h = haystack; *h != '\0'; h++) {
+        for (const char *n = needle, *h2 = h; ; n++, h2++) {
+            if (!*n) {
+                return h;
             }
-            p1 = p1_advance++;
+            if (!*h2 || *h2 != *n) {
+                break;
+            }
         }
     }
-    return *p2 == '\0' ? p1_advance : nullptr;
+    return nullptr;
 }
+
 
 
 std::ostream& operator<<(std::ostream& out, String s) {
