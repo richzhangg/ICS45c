@@ -156,14 +156,6 @@ char *String::strcpy(char *dest, const char *src) {
 }
 
 
-char* String::strdup(const char* src) {
-    int length = strlen(src) + 1;
-    char *newStr = new char[length];
-    strcpy(newStr, src);
-    return newStr;
-}
-
-
 char *String::strncpy(char *dest, const char *src, int n) {
     int i = 0;
     for (; src[i] && i < n; ++i) {
@@ -244,7 +236,7 @@ const char *String::strstr(const char *haystack, const char *needle) {
     const char *p1_advance = haystack;
     for (p1 = haystack, p2 = needle; *p1 && *p2; p1++, p2++) {
         if (*p1 != *p2) {
-            p2 = needle
+            p2 = needle;
             if (!*p1_advance) {
                 return nullptr;
             }
