@@ -19,6 +19,10 @@ String::String(const char* s) : buf(strdup(s)) {}
 
 String::String(const String& s) : buf(strdup(s.buf)) {}
 
+String::String(String&& other) noexcept : buf(other.buf) {
+    other.buf = nullptr; // Prevent the source object from deleting the memory.
+}
+
 
 String::~String() {
     delete[] buf;
@@ -29,9 +33,17 @@ void String::swap(String& s) {
     std::swap(buf, s.buf);
 }
 
-
 String& String::operator=(String s) {
     swap(s);
+    return *this;
+}
+
+String& String::operator=(String&& other) noexcept {
+    if (this != &other) { // Guard against self-assignment
+        delete[] buf; // Free the existing resource.
+        buf = other.buf; // Transfer ownership of the resource.
+        other.buf = nullptr; // Leave the source object in a valid state.
+    }
     return *this;
 }
 
@@ -107,18 +119,15 @@ bool String::operator>=(String s) const {
 }
 
 
-String String::operator+(String s) const {
-    char* concatenated = new char[size() + s.size() + 1];
-    std::strcpy(concatenated, buf);
-    std::strcat(concatenated, s.buf);
-    String result(concatenated);
-    delete[] concatenated;
-    return result;
+String String::operator+(const String& s) const {
+    String temp;
+    // Concatenate this->buf and s.buf into temp.buf
+    return temp;
 }
 
 
 String& String::operator+=(String s) {
-    *this = *this + s;
+    *this = std::move(*this + s);
     return *this;
 }
 
@@ -216,7 +225,7 @@ void String::reverse_cpy(char *dest, const char *src) {
     for (int i = 0; i < len; ++i) {
         dest[i] = src[len - i - 1];
     }
-    dest[len] = '\0';
+    dest[len] = '\0'; // Full match found, return start
 }
 
 

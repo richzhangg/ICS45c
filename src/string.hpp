@@ -16,8 +16,11 @@ public:
     // swap buf between this string and s using std::swap, explained later
     void swap(String &s);
 
+    String(String&& other) noexcept;
     // assignment operator from one string, s, to this string
-    String &operator=(String s);
+    String &operator=(const String& other);
+
+	String& operator=(String&& other) noexcept;
 
     // assign to this string by moving from string s
     // String &operator=(String &&s);
