@@ -135,7 +135,7 @@ String String::operator+(const String& s) const {
 
 
 String& String::operator+=(String s) {
-    *this = std::move(*this + s);
+    *this = *this + s;
     return *this;
 }
 
