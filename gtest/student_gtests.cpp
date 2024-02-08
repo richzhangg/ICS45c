@@ -107,7 +107,7 @@ TEST(StringFunction, strcmp_Basic) {
     EXPECT_GT(String::strcmp("bcd", "abc"), 0);
 }
 
-TEST(StringFunction, strncmp_Basic) {
+TEST(StringFunction, strncmp) {
     EXPECT_EQ(String::strncmp("abcde", "abcff", 3), 0);
     EXPECT_LT(String::strncmp("abc", "bcd", 2), 0);
     EXPECT_GT(String::strncmp("bcd", "abc", 2), 0);
