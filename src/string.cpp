@@ -198,10 +198,15 @@ int String::strcmp(const char *left, const char *right) {
 
 
 int String::strncmp(const char *left, const char *right, int n) {
-    for (int i = 0; i < n && *left && *right; ++i, ++left, ++right) {
+    for (int i = 0; i < n; ++i) {
         if (*left != *right) {
             return *(const unsigned char *)left - *(const unsigned char *)right;
+        } else if (!*left || !*right) {
+            // Reached the end of one string before reaching n characters.
+            return *(const unsigned char *)left - *(const unsigned char *)right;
         }
+        ++left;
+        ++right;
     }
     return 0;
 }
