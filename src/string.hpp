@@ -18,7 +18,7 @@ public:
 
     String(String&& other) noexcept;
     // assignment operator from one string, s, to this string
-    String &operator=(const String& other);
+    String& operator=(const String& other);
 
 	String& operator=(String&& other) noexcept;
 
@@ -51,7 +51,7 @@ public:
     bool operator>=(String s) const;
 
     // concatenate this and s to form a return string
-    String operator+(String s) const;
+    String operator+(const String& s) const;
 
     // concatenate s onto the end of this string
     String &operator+=(String s);

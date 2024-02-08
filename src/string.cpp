@@ -33,8 +33,9 @@ void String::swap(String& s) {
     std::swap(buf, s.buf);
 }
 
-String& String::operator=(String s) {
-    swap(s);
+String& String::operator=(const  String& other) {
+    String temp(other);
+    swap(temp);
     return *this;
 }
 
@@ -120,9 +121,12 @@ bool String::operator>=(String s) const {
 
 
 String String::operator+(const String& s) const {
-    String temp;
-    // Concatenate this->buf and s.buf into temp.buf
-    return temp;
+    char* concatenated = new char[size() + s.size() + 1];
+    std::strcpy(concatenated, buf);
+    std::strcat(concatenated, s.buf);
+    String result(concatenated);
+    delete[] concatenated;
+    return result;
 }
 
 
