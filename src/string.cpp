@@ -173,16 +173,18 @@ char *String::strcpy(char *dest, const char *src) {
 }
 
 
-char *String::strncpy(char *dest, const char *src, int n) {
-    int i = 0;
-    for (; src[i] && i < n; ++i) {
+char* String::strncpy(char* dest, const char* src, int n) {
+    int i;
+    for (i = 0; i < n && src[i] != '\0'; i++) {
         dest[i] = src[i];
     }
-    for (; i < n; ++i) {
+
+    for (; i < n; i++) {
         dest[i] = '\0';
     }
     return dest;
 }
+
 
 
 char *String::strcat(char *dest, const char *src) {
