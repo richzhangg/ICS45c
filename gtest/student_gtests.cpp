@@ -34,16 +34,12 @@ TEST(ListTests, Length) {
 // Add remaining tests below. All tests should follow
 // the format of `TEST(ListTests, <TestName>)
 
-TEST(ListTests, CountCharOccurrences_ShouldFail) {
-    Node* head = list::from_string("hello");
+TEST(StringClass, IncorrectLengthAssertion) {
+    String s("test");
     
-    // Intentionally expecting incorrect result to demonstrate a failing test
-    int count = list::count_char_occurrences(head, 'l');
-    
-    // The correct count should be 2, but we will assert an incorrect expectation
-    EXPECT_EQ(count, 3) << "Expected 3 occurrences of 'l' in \"hello\", but got " << count;
-    
-    list::free(head);
+    // Incorrect assertion: The actual size is 4, but we're asserting it to be 5.
+    EXPECT_EQ(s.size(), 5) << "Expected size of 'test' to be 5, but it was actually " << s.size();
+}
 
 }TEST(ListTests, Reverse) {
     // Create a list from a string
