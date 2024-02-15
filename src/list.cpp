@@ -6,12 +6,12 @@ namespace list {
 
 Node* from_string(const char* s) {
     if (s == nullptr || *s == '\0') {
-        return nullptr; // Handle empty or null input strings
+        return nullptr;
     }
     
     Node* head = new Node{.data = *s, .next = nullptr};
     Node* current = head;
-    ++s; // Move to the next character
+    ++s;
 
     while (*s != '\0') {
         current->next = new Node{.data = *s, .next = nullptr};
@@ -48,7 +48,7 @@ Node* copy(Node* head) {
             current = current->next;
         }
     } catch (...) {
-        free(newHead); // Deallocate if exception occurs during copy
+        free(newHead);
         throw;
     }
 
@@ -62,11 +62,11 @@ int compare(Node* lhs, Node* rhs) {
     }
     
     if (lhs == nullptr && rhs == nullptr) {
-        return 0; // Lists are equal
+        return 0;
     } else if (lhs == nullptr) {
-        return -1; // lhs is shorter than rhs
+        return -1;
     } else if (rhs == nullptr) {
-        return 1; // lhs is longer than rhs
+        return 1;
     } else {
         return lhs->data < rhs->data ? -1 : 1;
     }
@@ -81,7 +81,7 @@ int length(Node* head) {
 }
 
 int compare(Node* lhs, Node* rhs, int n) {
-    assert(n >= 0); // Ensure n is non-negative
+    assert(n >= 0); 
     while (n > 0 && lhs != nullptr && rhs != nullptr && lhs->data == rhs->data) {
         lhs = lhs->next;
         rhs = rhs->next;
@@ -89,11 +89,11 @@ int compare(Node* lhs, Node* rhs, int n) {
     }
 
     if (n == 0 || (lhs == nullptr && rhs == nullptr)) {
-        return 0; // Lists are equal up to n nodes or both lists ended
+        return 0; 
     } else if (lhs == nullptr) {
-        return -1; // lhs is shorter than rhs
+        return -1; 
     } else if (rhs == nullptr) {
-        return 1; // lhs is longer than rhs
+        return 1; 
     } else {
         return lhs->data < rhs->data ? -1 : 1;
     }
@@ -105,12 +105,12 @@ Node* reverse(Node* head) {
     Node* next = nullptr;
     
     while (current != nullptr) {
-        next = current->next;  // Save next node
-        current->next = prev;  // Reverse current node's next pointer
-        prev = current;        // Move prev forward
-        current = next;        // Move current forward
+        next = current->next;  
+        current->next = prev;  
+        prev = current;        
+        current = next;       
     }
-    return prev;  // New head of the reversed list
+    return prev;
 }
 
 
@@ -128,7 +128,7 @@ int index(Node* head, Node* node) {
             return idx;
         }
     }
-    return -1; // Node not found
+    return -1;
 }
 
 Node* find_char(Node* head, char c) {
@@ -137,11 +137,11 @@ Node* find_char(Node* head, char c) {
             return current;
         }
     }
-    return nullptr; // Char not found
+    return nullptr;
 }
 
 Node* find_list(Node* haystack, Node* needle) {
-    if (needle == nullptr) return haystack; // An empty needle is found at the start
+    if (needle == nullptr) return haystack;
     for (Node* h = haystack; h != nullptr; h = h->next) {
         Node* n = needle;
         Node* h_sub = h;
@@ -150,20 +150,19 @@ Node* find_list(Node* haystack, Node* needle) {
             n = n->next;
         }
         if (n == nullptr) {
-            // Found the whole needle in haystack
             return h;
         }
     }
-    return nullptr; // Needle not found
+    return nullptr;
 }
 
 Node* nth(Node* head, int n) {
-    assert(n >= 0); // Ensure n is non-negative
+    assert(n >= 0);
     while (n > 0 && head != nullptr) {
         head = head->next;
         --n;
     }
-    return head; // This will return nullptr if n is out of bounds
+    return head;
 }
 
 Node* last(Node* head) {
