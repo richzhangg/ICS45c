@@ -100,15 +100,19 @@ int compare(Node* lhs, Node* rhs, int n) {
 }
 
 Node* reverse(Node* head) {
-    Node* newHead = nullptr;
-    while (head != nullptr) {
-        Node* next = head->next;
-        head->next = newHead;
-        newHead = head;
-        head = next;
+    Node* prev = nullptr;
+    Node* current = head;
+    Node* next = nullptr;
+    
+    while (current != nullptr) {
+        next = current->next;  // Save next node
+        current->next = prev;  // Reverse current node's next pointer
+        prev = current;        // Move prev forward
+        current = next;        // Move current forward
     }
-    return newHead;
+    return prev;  // New head of the reversed list
 }
+
 
 Node* append(Node* lhs, Node* rhs) {
     if (lhs == nullptr) return copy(rhs);
