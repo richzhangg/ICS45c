@@ -34,6 +34,27 @@ TEST(ListTests, Length) {
 // Add remaining tests below. All tests should follow
 // the format of `TEST(ListTests, <TestName>){}`.
 
-TEST(ListTests, ReplaceMe) {
-    EXPECT_TRUE(false);
+TEST(ListTests, Reverse) {
+    // Create a list from a string
+    Node* head = list::from_string("abc");
+    
+    // Reverse the list
+    Node* reversedHead = list::reverse(head);
+    
+    // Check the reversed list content
+    ASSERT_NE(reversedHead, nullptr);
+    EXPECT_EQ(reversedHead->data, 'c');
+    Node* second = reversedHead->next;
+    ASSERT_NE(second, nullptr);
+    EXPECT_EQ(second->data, 'b');
+    Node* third = second->next;
+    ASSERT_NE(third, nullptr);
+    EXPECT_EQ(third->data, 'a');
+    
+    // Ensure the list ends here
+    EXPECT_EQ(third->next, nullptr);
+    
+    // Free the reversed list
+    list::free(reversedHead);
 }
+
