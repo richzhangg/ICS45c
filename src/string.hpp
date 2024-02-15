@@ -15,7 +15,7 @@ public:
     String(const String &s);
 
     // construct this string by moving from string s
-    String(String &&s);
+    String(String &&s) ;
 
     // swap this string with s
     void swap(String &s);
