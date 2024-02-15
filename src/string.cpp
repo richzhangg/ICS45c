@@ -54,9 +54,13 @@ bool String::in_bounds(int index) const {
 
 // allow const indexing
 char String::operator[](int index) const {
-   list::Node* node = list::nth(head, index);
-    return node ? node->data : '\0';
+    if (index < 0 || index >= this->size()) {
+        std::cerr << "ERROR: Index out of bounds\n";
+        return '\0';  // Or handle the error as appropriate
+    }
+    // Access and return the character at the specified index
 }
+
 
 // returns the logical length of this string (# of chars up to '\0')
 int String::size() const {
