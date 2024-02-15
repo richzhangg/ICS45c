@@ -54,13 +54,17 @@ bool String::in_bounds(int index) const {
 
 char String::operator[](int index) const {
     if (index >= 0 && index < this->size()) {
-        // Logic to return the character at the specified index
+        list::Node* current = head;
+        for (int i = 0; i < index; ++i) { // Traverse the list to the index
+            current = current->next;
+        }
+        return current->data; // Return the character at the index
     } else {
-        std::cerr << "Index out of range.\n"; // Optional: Indicate an error
+        std::cerr << "Index out of range.\n"; // Indicate an error
         return '\0'; // Return a default value indicating an error or out-of-bounds access
     }
-	return '\0';
 }
+
 
 
 
