@@ -65,7 +65,14 @@ int String::size() const {
 
 // returns a reversal of this string, does not modify this string
 String String::reverse() const {
-    return String(list::reverse(head));
+    list::Node* reversedHead = nullptr;
+    list::Node* current = head;
+    while (current != nullptr) {
+        reversedHead = new list::Node{current->data, reversedHead};  // Prepend to create reversed copy
+        current = current->next;
+    }
+    // Use the private constructor to create a String with the reversed list
+    return String(reversedHead);
 }
 
 // returns index into this string for first occurrence of c
