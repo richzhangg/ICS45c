@@ -81,8 +81,13 @@ int String::indexOf(char c) const {
     return list::index(head, node);
 }
 
-// returns index into this string for first occurrence of s
 int String::indexOf(const String &s) const {
+    // Special case: searching for an empty string in an empty string
+    if (this->size() == 0 && s.size() == 0) {
+        return 0; // Indicate that the empty string is found at the start
+    }
+    
+    // Existing logic for indexOf
     list::Node* node = list::find_list(head, s.head);
     return list::index(head, node);
 }
