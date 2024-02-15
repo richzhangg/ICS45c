@@ -33,6 +33,9 @@ TEST(ListTests, Length) {
 
 // Add remaining tests below. All tests should follow
 // the format of `TEST(ListTests, <TestName>){}`.
+TEST(ListTests, ReplaceMe) {
+    EXPECT_TRUE(false);
+}
 
 TEST(ListTests, Reverse) {
     // Create a list from a string
