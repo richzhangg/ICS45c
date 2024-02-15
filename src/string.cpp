@@ -52,14 +52,15 @@ bool String::in_bounds(int index) const {
     return index >= 0 && index < list::length(head);
 }
 
-// allow const indexing
 char String::operator[](int index) const {
-    if (index < 0 || index >= this->size()) {
-        std::cerr << "ERROR: Index out of bounds\n";
-        return '\0';  // Or handle the error as appropriate
+    if (index >= 0 && index < this->size()) {
+        // Logic to return the character at the specified index
+    } else {
+        std::cerr << "Index out of range.\n"; // Optional: Indicate an error
+        return '\0'; // Return a default value indicating an error or out-of-bounds access
     }
-    // Access and return the character at the specified index
 }
+
 
 
 // returns the logical length of this string (# of chars up to '\0')
