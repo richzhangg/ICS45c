@@ -34,11 +34,18 @@ TEST(ListTests, Length) {
 // Add remaining tests below. All tests should follow
 // the format of `TEST(ListTests, <TestName>)
 
-TEST(ListTests, HandlesNegative) {
-    EXPECT_EQ(calculateSum(-5, -5), -10) << "calculateSum should correctly add negative numbers.";
-}
+TEST(ListTests, CountCharOccurrences_ShouldFail) {
+    Node* head = list::from_string("hello");
+    
+    // Intentionally expecting incorrect result to demonstrate a failing test
+    int count = list::count_char_occurrences(head, 'l');
+    
+    // The correct count should be 2, but we will assert an incorrect expectation
+    EXPECT_EQ(count, 3) << "Expected 3 occurrences of 'l' in \"hello\", but got " << count;
+    
+    list::free(head);
 
-TEST(ListTests, Reverse) {
+}TEST(ListTests, Reverse) {
     // Create a list from a string
     Node* head = list::from_string("abc");
     
