@@ -34,6 +34,10 @@ TEST(ListTests, Length) {
 // Add remaining tests below. All tests should follow
 // the format of `TEST(ListTests, <TestName>)
 
+TEST(ListTests, HandlesNegative) {
+    EXPECT_EQ(calculateSum(-5, -5), -10) << "calculateSum should correctly add negative numbers.";
+}
+
 TEST(ListTests, Reverse) {
     // Create a list from a string
     Node* head = list::from_string("abc");
