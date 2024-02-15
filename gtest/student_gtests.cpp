@@ -34,14 +34,13 @@ TEST(ListTests, Length) {
 // Add remaining tests below. All tests should follow
 // the format of `TEST(ListTests, <TestName>)
 
-TEST(StringClass, IncorrectLengthAssertion) {
-    String s("test");
-    
-    // Incorrect assertion: The actual size is 4, but we're asserting it to be 5.
-    EXPECT_EQ(s.size(), 5) << "Expected size of 'test' to be 5, but it was actually " << s.size();
+TEST(ListTests, IntentionalFailure) {
+    // This test is designed to intentionally fail to demonstrate how failures are handled.
+    // It does not depend on any specific functionality of the list implementation.
+    EXPECT_EQ(1, 2) << "This test intentionally fails by asserting that 1 equals 2.";
 }
 
-}TEST(ListTests, Reverse) {
+TEST(ListTests, Reverse) {
     // Create a list from a string
     Node* head = list::from_string("abc");
     
