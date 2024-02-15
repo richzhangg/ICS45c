@@ -37,10 +37,6 @@ TEST(ListTests, ReplaceMe) {
     EXPECT_TRUE(true);
 }
 
-TEST(ListTests, ReplaceMUE) {
-	EXPECT_TRUE(false);
-}
-
 TEST(ListTests, Reverse) {
     // Create a list from a string
     Node* head = list::from_string("abc");
