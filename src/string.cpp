@@ -59,6 +59,7 @@ char String::operator[](int index) const {
         std::cerr << "Index out of range.\n"; // Optional: Indicate an error
         return '\0'; // Return a default value indicating an error or out-of-bounds access
     }
+	return '\0';
 }
 
 
