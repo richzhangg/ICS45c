@@ -66,6 +66,7 @@ void Picture::print_all(std::ostream& out) const {
     ListNode* current = head;
     while (current != nullptr) {
         current->shape->print(out);
+        current->shape->draw(out);
         current = current->next;
     }
 }
