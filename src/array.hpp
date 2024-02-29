@@ -25,10 +25,13 @@ public:
         delete[] buf;
     }
 
-    Array& operator=(const Array other) {
-        swap(*this, other);
-        return *this;
+    Array& operator=(const Array& other) {
+    if (this != &other) {
+        Array temp(other);
+        swap(*this, temp);
     }
+    return *this;
+	}
 
     Array& operator=(Array&& other) noexcept {
         if (this != &other) {
@@ -64,6 +67,13 @@ public:
             buf[i] = fn(i);
         }
     }
+
+	void fill(const T& val) {
+    for (int i = 0; i < len; ++i) {
+        buf[i] = val;
+    }
+	}
+
 
 private:
     int len;
