@@ -65,6 +65,7 @@ std::ostream& operator<<(std::ostream& out, const Matrix<T>& matrix) {
     return out;
 }
 
+
 // Read matrix from `in`
 template <typename T>
 std::istream& operator>>(std::istream& in, Matrix<T>& matrix) {
