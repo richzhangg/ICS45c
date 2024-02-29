@@ -5,7 +5,6 @@
 #include <iostream>
 #include <sstream>
 #include <utility>
-#include <type_traits>
 
 template <typename T>
 class Array {
@@ -92,24 +91,12 @@ private:
 
 template <typename T>
 std::ostream& operator<<(std::ostream& out, const Array<T>& array) {
+    std::stringstream temp;
+    temp << std::setprecision(2) << std::fixed << std::right;
     for (int i = 0; i < array.length(); ++i) {
-        if constexpr (std::is_floating_point_v<T>) {
-            out << std::fixed << std::setprecision(2) << std::setw(8);
-        }
-        
-        out << array[i];
-        
-        if (i < array.length() - 1) {
-            if constexpr (std::is_floating_point_v<T>) {
-                out << std::resetiosflags(std::ios::fixed);
-                out << std::resetiosflags(std::ios::floatfield);
-                out << std::setprecision(0);
-            }
-            out << " ";
-        }
+        temp << std::setw(8) << array[i];
     }
-    out << std::resetiosflags(std::ios::fixed | std::ios::floatfield);
-    out << std::setprecision(0);
+    out << temp.str();
     return out;
 }
 
