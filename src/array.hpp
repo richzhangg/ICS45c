@@ -5,7 +5,6 @@
 #include <iostream>
 #include <sstream>
 #include <utility>
-#include <type_traits>
 
 template <typename T>
 class Array {
@@ -90,24 +89,11 @@ private:
     }
 };
 
-template<typename T>
+template <typename T>
 std::ostream& operator<<(std::ostream& out, const Array<T>& array) {
-    bool isFirstElement = true;
     for (int i = 0; i < array.length(); ++i) {
-        if constexpr (std::is_floating_point_v<T>) {
-            // Apply formatting only for floating-point types
-            if (!isFirstElement) {
-                out << " "; // Add a space before non-first elements
-            }
-            out << std::setw(7) << std::right << std::fixed << std::setprecision(2) << array[i];
-        } else {
-            // Direct output for non-floating types
-            if (!isFirstElement) {
-                out << " "; // Ensure space is added before non-first elements
-            }
-            out << array[i];
-        }
-        isFirstElement = false;
+        if (i > 0) out << ' ';
+        out << array[i];
     }
     return out;
 }
