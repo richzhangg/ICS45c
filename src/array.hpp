@@ -90,15 +90,24 @@ private:
     }
 };
 
-template <typename T>
+template<typename T>
 std::ostream& operator<<(std::ostream& out, const Array<T>& array) {
+    bool isFirstElement = true;
     for (int i = 0; i < array.length(); ++i) {
         if constexpr (std::is_floating_point_v<T>) {
-            out << (i > 0 ? " " : "") << std::setw(8) << std::fixed << std::setprecision(2) << array[i];
+            // Apply formatting only for floating-point types
+            if (!isFirstElement) {
+                out << " "; // Add a space before non-first elements
+            }
+            out << std::setw(7) << std::right << std::fixed << std::setprecision(2) << array[i];
         } else {
-            if (i > 0) out << " ";
+            // Direct output for non-floating types
+            if (!isFirstElement) {
+                out << " "; // Ensure space is added before non-first elements
+            }
             out << array[i];
         }
+        isFirstElement = false;
     }
     return out;
 }
