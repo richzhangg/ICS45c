@@ -12,7 +12,7 @@ public:
     // Construct matrix with given number of rows and columns
     Matrix(int rows, int cols) : rows(rows), cols(cols), data(rows) {
         for (int i = 0; i < rows; ++i) {
-            data[i] = Array<T>(cols);
+            data[i] = std::move(Array<T>(cols));
         }
     }
 
