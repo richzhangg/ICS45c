@@ -91,10 +91,12 @@ private:
 
 template <typename T>
 std::ostream& operator<<(std::ostream& out, const Array<T>& array) {
+    std::stringstream temp;
+    temp << std::setprecision(2) << std::fixed << std::right;
     for (int i = 0; i < array.length(); ++i) {
-        if (i > 0) out << " ";
-        out << array[i];
+        temp << std::setw(8) << array[i];
     }
+    out << temp.str();
     return out;
 }
 
