@@ -52,18 +52,18 @@ private:
     Array<Array<T>> data;
 };
 
-// Print matrix to `out`
 template <typename T>
 std::ostream& operator<<(std::ostream& out, const Matrix<T>& matrix) {
     for (int i = 0; i < matrix.num_rows(); ++i) {
         for (int j = 0; j < matrix.num_cols(); ++j) {
-            if (j > 0) out << " ";
             out << matrix[i][j];
+            if (j < matrix.num_cols() - 1) out << " ";
         }
         out << "\n";
     }
     return out;
 }
+
 
 
 // Read matrix from `in`
