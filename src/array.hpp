@@ -93,23 +93,16 @@ private:
 template <typename T>
 std::ostream& operator<<(std::ostream& out, const Array<T>& array) {
     for (int i = 0; i < array.length(); ++i) {
+        if (i > 0) out << " ";
+        
         if constexpr (std::is_floating_point_v<T>) {
-            out << std::fixed << std::setprecision(2) << std::setw(8);
-        }
-
-        out << array[i];
-
-        if (i < array.length() - 1) {
-            if constexpr (std::is_floating_point_v<T>) {
-                out << std::resetiosflags(std::ios::fixed);
-                out << std::resetiosflags(std::ios::floatfield);
-                out << std::setprecision(0);
-            }
-            out << " ";
+            out << std::fixed << std::setprecision(2) << std::setw(8) << array[i];
+            out << std::resetiosflags(std::ios::fixed | std::ios::floatfield);
+            out << std::setprecision(0);
+        } else {
+            out << array[i];
         }
     }
-    out << std::resetiosflags(std::ios::fixed | std::ios::floatfield);
-    out << std::setprecision(0);
     return out;
 }
 
