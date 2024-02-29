@@ -94,13 +94,12 @@ template <typename T>
 std::ostream& operator<<(std::ostream& out, const Array<T>& array) {
     for (int i = 0; i < array.length(); ++i) {
         if constexpr (std::is_floating_point_v<T>) {
-            out << (i > 0 ? " " : "") << std::fixed << std::setprecision(2) << std::setw(8) << array[i];
+            out << (i > 0 ? " " : "") << std::setw(8) << std::fixed << std::setprecision(2) << array[i];
         } else {
-            out << (i > 0 ? " " : "") << array[i];
+            if (i > 0) out << " ";
+            out << array[i];
         }
     }
-    out << std::resetiosflags(std::ios_base::fixed | std::ios_base::floatfield);
-    out << std::setprecision(0);
     return out;
 }
 
