@@ -84,24 +84,23 @@ bool Student::operator==(const Student& other) const {
 }
 
 std::istream& operator>>(std::istream& in, Student& s) {
-    std::string line, word;
-    s.quiz.clear();
-    s.hw.clear();
+    std::string line, key;
     while (std::getline(in, line) && !line.empty()) {
         std::istringstream iss(line);
-        iss >> word;
-        if (word == "Name") {
-            iss >> s.first_name >> s.last_name;
-        } else if (word == "Quiz") {
-            std::copy(std::istream_iterator<int>(iss), std::istream_iterator<int>(), back_inserter(s.quiz));
-        } else if (word == "HW") {
-            std::copy(std::istream_iterator<int>(iss), std::istream_iterator<int>(), back_inserter(s.hw));
-        } else if (word == "Final") {
+        iss >> key;
+        if (key == "Name") {
+            std::getline(iss >> std::ws, s.full_name); // Capture the rest of the line as the full name
+        } else if (key == "Quiz") {
+            s.quiz = std::vector<int>(std::istream_iterator<int>(iss), {});
+        } else if (key == "HW") {
+            s.hw = std::vector<int>(std::istream_iterator<int>(iss), {});
+        } else if (key == "Final") {
             iss >> s.final_score;
         }
     }
     return in;
 }
+
 
 std::ostream& operator<<(std::ostream& out, const Student& s) {
     auto print_score = [&out](double score) {
