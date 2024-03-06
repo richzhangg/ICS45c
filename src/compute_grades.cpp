@@ -71,8 +71,9 @@ void Student::validate() const {
 std::strong_ordering Student::operator<=>(const Student& other) const {
     if (auto cmp = last_name <=> other.last_name; cmp != 0) return cmp;
     if (auto cmp = first_name <=> other.first_name; cmp != 0) return cmp;
-	if (auto cmp = total <=> other.total; cmp != 0) return cmp;
-    return std::strong_ordering::equal; // Indicate that all compared fields are equal.
+    // Use course_score if that's what you want to compare
+    if (auto cmp = course_score <=> other.course_score; cmp != 0) return cmp;
+    return std::strong_ordering::equal;
 }
 
 
