@@ -39,11 +39,11 @@ void Student::compute_grade() {
         {0, "F"}
     };
     
-    for (const auto& [lower_bound, grade] : grade_map) {
-        if (course_score >= lower_bound) {
-            course_grade = grade;
-            break;
-        }
+    auto it = grade_map.lower_bound(course_score);
+    if (it != grade_map.end()) {
+        course_grade = it->second;
+    } else {
+        course_grade = "F"; // Default to F if not found
     }
 }
 
