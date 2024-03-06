@@ -6,6 +6,7 @@
 #include <cmath>
 #include <iomanip>
 #include <stdexcept>
+#include <map>
 
 void Student::compute_quiz_avg() {
     if (quiz.empty()) {
