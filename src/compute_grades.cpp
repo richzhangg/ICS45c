@@ -35,22 +35,22 @@ void Student::compute_grade() {
     compute_quiz_avg();
     compute_hw_avg();
     compute_course_score();
-    // Map of letter grades to numeric score ranges
-    static const std::map<int, std::string> grade_map {
-        {97, "A+"}, {93, "A"}, {90, "A-"},
-        {87, "B+"}, {83, "B"}, {80, "B-"},
-        {77, "C+"}, {73, "C"}, {70, "C-"},
-        {67, "D+"}, {63, "D"}, {60, "D-"},
-        {0, "F"}
-    };
-    
-    auto it = grade_map.lower_bound(course_score);
-    if (it != grade_map.end()) {
-        course_grade = it->second;
-    } else {
-        course_grade = "F"; // Default to F if not found
-    }
+
+    if (course_score >= 97) course_grade = "A+";
+    else if (course_score >= 93) course_grade = "A";
+    else if (course_score >= 90) course_grade = "A-";
+    else if (course_score >= 87) course_grade = "B+";
+    else if (course_score >= 83) course_grade = "B";
+    else if (course_score >= 80) course_grade = "B-";
+    else if (course_score >= 77) course_grade = "C+";
+    else if (course_score >= 73) course_grade = "C";
+    else if (course_score >= 70) course_grade = "C-";
+    else if (course_score >= 67) course_grade = "D+";
+    else if (course_score >= 63) course_grade = "D";
+    else if (course_score >= 60) course_grade = "D-";
+    else course_grade = "F"; // This covers everything below 60
 }
+
 
 void Student::validate() const {
     std::for_each(quiz.begin(), quiz.end(), [](int score) {
