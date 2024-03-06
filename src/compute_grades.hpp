@@ -8,7 +8,6 @@
 
 class Student {
 public:
-	Student() : quiz_avg(0.0), hw_avg(0.0), final_score(0.0), course_score(0) {}
     void validate() const;
 
     void compute_grade();
