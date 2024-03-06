@@ -103,14 +103,24 @@ std::istream& operator>>(std::istream& in, Student& s) {
 }
 
 std::ostream& operator<<(std::ostream& out, const Student& s) {
-    out << std::left << std::setw(8) << "Name: " << s.first_name << " " << s.last_name << "\n"
-        << std::setw(8) << "HW Ave: " << std::setprecision(1) << std::fixed << s.hw_avg << "\n"
-        << std::setw(8) << "QZ Ave: " << s.quiz_avg << "\n"
-        << std::setw(8) << "Final: " << s.final_score << "\n"
-        << std::setw(8) << "Total: " << s.course_score << "\n"
-        << std::setw(8) << "Grade: " << s.course_grade << "\n\n";
+    auto print_score = [&out](double score) {
+        if (score == static_cast<int>(score)) { // If the score is a whole number
+            out << static_cast<int>(score);     // Cast to int and print without decimals
+        } else {
+            out << std::fixed << std::setprecision(1) << score; // Otherwise print with one decimal
+        }
+    };
+
+    out << "Name:   " << s.first_name << " " << s.last_name << "\n";
+    out << "HW Ave: "; print_score(s.hw_avg); out << "\n";
+    out << "QZ Ave: "; print_score(s.quiz_avg); out << "\n";
+    out << "Final:  "; print_score(s.final_score); out << "\n";
+    out << "Total:  " << s.course_score << "\n";
+    out << "Grade:  " << s.course_grade << "\n\n";
+
     return out;
 }
+
 
 void Gradebook::compute_grades() {
     for (auto& student : students) {
