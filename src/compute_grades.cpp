@@ -117,10 +117,11 @@ std::ostream& operator<<(std::ostream& out, const Student& s) {
     out << "QZ Ave: "; print_score(s.quiz_avg); out << "\n";
     out << "Final:  "; print_score(s.final_score); out << "\n";
     out << "Total:  " << s.course_score << "\n";
-    out << "Grade:  " << s.course_grade << "\n\n";
+    out << "Grade:  " << s.course_grade << "\n"; // Remove one \n here
 
     return out;
 }
+
 
 
 void Gradebook::compute_grades() {
