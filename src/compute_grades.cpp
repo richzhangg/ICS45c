@@ -71,9 +71,11 @@ void Student::validate() const {
 }
 
 std::strong_ordering Student::operator<=>(const Student& other) const {
-    if (auto cmp = last_name.compare(other.last_name); cmp != 0) return cmp < 0 ? std::strong_ordering::less : std::strong_ordering::greater;
-    return first_name.compare(other.first_name) < 0 ? std::strong_ordering::less : std::strong_ordering::greater;
+    if (auto cmp = last_name <=> other.last_name; cmp != 0) return cmp;
+    if (auto cmp = first_name <=> other.first_name; cmp != 0) return cmp;
+    return course_score <=> other.course_score; // Tiebreaker based on course_score
 }
+
 
 
 bool Student::operator==(const Student& other) const {
