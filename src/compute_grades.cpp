@@ -12,18 +12,16 @@ void Student::compute_quiz_avg() {
     if (quiz.empty()) {
         quiz_avg = 0.0;
     } else {
-        auto sum = std::accumulate(quiz.begin(), quiz.end(), 0.0);
-        auto count = quiz.size();
-        // Drop the lowest score if there's more than one quiz score
+        double sum = std::accumulate(quiz.begin(), quiz.end(), 0.0);
+        int count = static_cast<int>(quiz.size());
         if (count > 1) {
-            auto min_quiz_score = *std::min_element(quiz.begin(), quiz.end());
-            sum -= min_quiz_score;
-            --count; // Decrease the count since the lowest score is dropped
+            int min_score = *std::min_element(quiz.begin(), quiz.end());
+            sum -= min_score;  // Subtract the minimum score if more than one quiz
+            --count;  // Decrement count since the lowest score is dropped
         }
-        quiz_avg = sum / count;
+        quiz_avg = count > 0 ? sum / count : 0.0;  // Ensure we don't divide by zero
     }
 }
-
 
 void Student::compute_hw_avg() {
     hw_avg = hw.empty() ? 0 : std::accumulate(hw.begin(), hw.end(), 0) / static_cast<double>(hw.size());
