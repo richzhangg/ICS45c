@@ -64,9 +64,10 @@ void Student::validate() const {
 }
 
 std::strong_ordering Student::operator<=>(const Student& other) const {
-    if (auto cmp = last_name <=> other.last_name; cmp != 0) return cmp;
-    return first_name <=> other.first_name;
+    if (auto cmp = last_name.compare(other.last_name); cmp != 0) return cmp < 0 ? std::strong_ordering::less : std::strong_ordering::greater;
+    return first_name.compare(other.first_name) < 0 ? std::strong_ordering::less : std::strong_ordering::greater;
 }
+
 
 bool Student::operator==(const Student& other) const {
     return tie(last_name, first_name) == tie(other.last_name, other.first_name);
