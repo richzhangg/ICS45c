@@ -53,20 +53,21 @@ void Student::compute_grade() {
 }
 
 void Student::validate() const {
-    for (int score : quiz) {
+    std::for_each(quiz.begin(), quiz.end(), [](int score) {
         if (score < 0 || score > 100) {
             throw std::domain_error("Error: invalid percentage " + std::to_string(score));
         }
-    }
-    for (int score : hw) {
+    });
+    std::for_each(hw.begin(), hw.end(), [](int score) {
         if (score < 0 || score > 100) {
             throw std::domain_error("Error: invalid percentage " + std::to_string(score));
         }
-    }
+    });
     if (final_score < 0 || final_score > 100) {
         throw std::domain_error("Error: invalid percentage " + std::to_string(static_cast<int>(final_score)));
     }
 }
+
 
 std::strong_ordering Student::operator<=>(const Student& other) const {
     if (auto cmp = last_name <=> other.last_name; cmp != 0) return cmp;
