@@ -74,9 +74,11 @@ void Student::validate() const {
 }
 
 std::strong_ordering Student::operator<=>(const Student& other) const {
+    // First compare last names, then first names
     if (auto cmp = last_name <=> other.last_name; cmp != 0) return cmp;
-    return first_name <=> other.first_name;
+    return first_name <=> other.first_name; // Assume first_name includes the full "first part" of the name
 }
+
 
 
 bool Student::operator==(const Student& other) const {
@@ -104,11 +106,7 @@ std::istream& operator>>(std::istream& in, Student& s) {
 
 std::ostream& operator<<(std::ostream& out, const Student& s) {
     auto print_score = [&out](double score) {
-        if (score == static_cast<int>(score)) { // If the score is a whole number
-            out << static_cast<int>(score);     // Cast to int and print without decimals
-        } else {
-            out << std::fixed << std::setprecision(1) << score; // Otherwise print with one decimal
-        }
+        out << (score == static_cast<int>(score) ? std::to_string(static_cast<int>(score)) : std::to_string(score));
     };
 
     out << "Name:   " << s.full_name << "\n";
@@ -116,10 +114,11 @@ std::ostream& operator<<(std::ostream& out, const Student& s) {
     out << "QZ Ave: "; print_score(s.quiz_avg); out << "\n";
     out << "Final:  "; print_score(s.final_score); out << "\n";
     out << "Total:  " << s.course_score << "\n";
-    out << "Grade:  " << s.course_grade << "\n\n"; // Remove one \n here
-
+    out << "Grade:  " << s.course_grade << "\n"; // Ensure this is the only newline at the end of each student's block
+    // Do not add an extra "\n" here
     return out;
 }
+
 
 
 
