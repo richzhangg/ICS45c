@@ -111,7 +111,7 @@ std::ostream& operator<<(std::ostream& out, const Student& s) {
         }
     };
 
-    out << "Name:   " << s.first_name << " " << s.last_name << "\n";
+    out << "Name:   " << s.full_name << "\n";
     out << "HW Ave: "; print_score(s.hw_avg); out << "\n";
     out << "QZ Ave: "; print_score(s.quiz_avg); out << "\n";
     out << "Final:  "; print_score(s.final_score); out << "\n";
