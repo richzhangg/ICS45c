@@ -53,30 +53,30 @@ void Student::compute_grade() {
 
 
 void Student::validate() const {
-    std::for_each(quiz.begin(), quiz.end(), [](int score) {
+    // Validate quiz scores
+    std::for_each(quiz.begin(), quiz.end(), [](const int score) {
         if (score < 0 || score > 100) {
-            throw std::domain_error("Error: invalid percentage " + std::to_string(score));
+            throw std::domain_error("Error: invalid quiz percentage " + std::to_string(score));
         }
     });
-    std::for_each(hw.begin(), hw.end(), [](int score) {
+
+    // Validate homework scores
+    std::for_each(hw.begin(), hw.end(), [](const int score) {
         if (score < 0 || score > 100) {
-            throw std::domain_error("Error: invalid percentage " + std::to_string(score));
+            throw std::domain_error("Error: invalid homework percentage " + std::to_string(score));
         }
     });
+
+    // Validate final score
     if (final_score < 0 || final_score > 100) {
-        throw std::domain_error("Error: invalid percentage " + std::to_string(static_cast<int>(final_score)));
+        throw std::domain_error("Error: invalid final exam percentage " + std::to_string(static_cast<int>(final_score)));
     }
 }
 
-
 std::strong_ordering Student::operator<=>(const Student& other) const {
     if (auto cmp = last_name <=> other.last_name; cmp != 0) return cmp;
-    if (auto cmp = first_name <=> other.first_name; cmp != 0) return cmp;
-    // Use course_score if that's what you want to compare
-    if (auto cmp = course_score <=> other.course_score; cmp != 0) return cmp;
-    return std::strong_ordering::equal;
+    return first_name <=> other.first_name;
 }
-
 
 
 bool Student::operator==(const Student& other) const {
@@ -116,7 +116,7 @@ std::ostream& operator<<(std::ostream& out, const Student& s) {
     out << "QZ Ave: "; print_score(s.quiz_avg); out << "\n";
     out << "Final:  "; print_score(s.final_score); out << "\n";
     out << "Total:  " << s.course_score << "\n";
-    out << "Grade:  " << s.course_grade << "\n"; // Remove one \n here
+    out << "Grade:  " << s.course_grade << "\n\n"; // Remove one \n here
 
     return out;
 }
