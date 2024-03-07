@@ -9,6 +9,8 @@
 class Student {
 public:
 	Student() : last_name("Name"), first_name("Missing"), final_score(0.0), quiz_avg(0.0), hw_avg(0.0), course_score(0), course_grade("") {}
+
+	std::string full_name;
     void validate() const;
 
     void compute_grade();
