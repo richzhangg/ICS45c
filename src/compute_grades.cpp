@@ -54,24 +54,25 @@ void Student::compute_grade() {
 
 void Student::validate() const {
     // Validate quiz scores
-    std::for_each(quiz.begin(), quiz.end(), [](const int score) {
-        if (score < 0 || score > 100) {
-            throw std::domain_error("Error: invalid quiz percentage " + std::to_string(score));
+    for (size_t i = 0; i < quiz.size(); ++i) {
+        if (quiz[i] < 0 || quiz[i] > 100) {
+            throw std::domain_error("Error: invalid quiz percentage " + std::to_string(quiz[i]));
         }
-    });
+    }
 
     // Validate homework scores
-    std::for_each(hw.begin(), hw.end(), [](const int score) {
-        if (score < 0 || score > 100) {
-            throw std::domain_error("Error: invalid homework percentage " + std::to_string(score));
+    for (size_t i = 0; i < hw.size(); ++i) {
+        if (hw[i] < 0 || hw[i] > 100) {
+            throw std::domain_error("Error: invalid homework percentage " + std::to_string(hw[i]));
         }
-    });
+    }
 
     // Validate final score
     if (final_score < 0 || final_score > 100) {
-        throw std::domain_error("Error: invalid final exam percentage " + std::to_string(static_cast<int>(final_score)));
+        throw std::domain_error("Error: invalid final exam percentage " + std::to_string(final_score));
     }
 }
+
 
 std::strong_ordering Student::operator<=>(const Student& other) const {
     return full_name <=> other.full_name;
