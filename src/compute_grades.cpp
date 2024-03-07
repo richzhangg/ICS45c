@@ -74,7 +74,9 @@ void Student::validate() const {
 }
 
 std::strong_ordering Student::operator<=>(const Student& other) const {
-    return full_name <=> other.full_name;
+    if (auto cmp = last_name <=> other.last_name; cmp != 0) 
+        return cmp;
+    return first_name <=> other.first_name;
 }
 
 bool Student::operator==(const Student& other) const {
