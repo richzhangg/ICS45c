@@ -92,6 +92,7 @@ public:
         pointer ptr;
     };
 
+	using value_type = std::pair<Key, Value>;
     using iterator = ArrayIterator;
 
     MapArray() = default;
