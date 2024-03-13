@@ -1,5 +1,3 @@
-setlist.hpp
-
 #ifndef SET_LIST_HPP
 #define SET_LIST_HPP
 
@@ -19,19 +17,40 @@ class SetList {
 public:
     class ListIterator {
     public:
-        using iterator_category = ???;
-        using value_type = ???;
-        using difference_type = ???;
-        using pointer = ???;
-        using reference = ???;
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = T;
+        using difference_type = std::ptrdiff_t;
+        using pointer = T*;
+        using reference = T&;
 
-        explicit ListIterator(std::shared_ptr<ListNode> ptr = nullptr);
+        explicit ListIterator(std::shared_ptr<ListNode> ptr = nullptr) : ptr(ptr) {}
 
-        ListIterator& operator++();
-        ListIterator operator++(int);
-        T& operator*() const;
-        T* operator->() const;
-        bool operator==(const ListIterator& other) const = default;
+        ListIterator& operator++() {
+            if (ptr) ptr = ptr->next;
+            return *this;
+        }
+
+        ListIterator operator++(int) {
+            ListIterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        reference operator*() const {
+            return ptr->data;
+        }
+
+        pointer operator->() const {
+            return &(ptr->data);
+        }
+
+        bool operator==(const ListIterator& other) const {
+            return ptr == other.ptr;
+        }
+
+        bool operator!=(const ListIterator& other) const {
+            return !(*this == other);
+        }
 
     private:
         std::shared_ptr<ListNode> ptr;
@@ -44,19 +63,38 @@ public:
     SetList() = default;
 
     template <std::ranges::input_range Rng>
-    explicit SetList(Rng&& rng) {
+    explicit SetList(Rng&& rng) : head(nullptr) {
         std::ranges::for_each(std::forward<Rng>(rng),
             std::bind_front(&SetList::insert, this));
     }
 
-    ListIterator begin();
-    ListIterator end();
-    bool contains(const T& value);
-    ListIterator insert(T value);
+    iterator begin() {
+        return iterator(head);
+    }
+
+    iterator end() {
+        return iterator(nullptr);
+    }
+
+    bool contains(const T& value) {
+        for (auto node = head; node != nullptr; node = node->next) {
+            if (node->data == value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    iterator insert(T value) {
+        if (!contains(value)) {
+            auto newNode = std::make_shared<ListNode>(ListNode{value, head});
+            head = newNode;
+        }
+        return begin();
+    }
 
 private:
     std::shared_ptr<ListNode> head = nullptr;
 };
 
 #endif
-
