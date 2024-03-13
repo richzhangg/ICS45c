@@ -115,7 +115,6 @@ public:
 
         return it->second;
     }
-
 private:
     std::vector<std::pair<Key, Value>> data;
 };
