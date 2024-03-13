@@ -12,41 +12,108 @@ class MapArray {
 public:
     class ArrayIterator {
     public:
-        // Iterator traits
-        using iterator_category = ???;
-        using value_type = ???;
-        using difference_type = ???;
-        using pointer = ???;
-        using reference = ???;
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type = std::pair<Key, Value>;
+        using difference_type = std::ptrdiff_t;
+        using pointer = value_type*;
+        using reference = value_type&;
 
-        explicit ArrayIterator(std::pair<Key, Value>* ptr = nullptr);
+        explicit ArrayIterator(pointer ptr = nullptr) : ptr(ptr) {}
 
-        ArrayIterator& operator++();
-        ArrayIterator& operator--();
-        ArrayIterator operator++(int);
-        ArrayIterator operator--(int);
-        ArrayIterator& operator+=(difference_type d);
-        ArrayIterator& operator-=(difference_type d);
-        friend ArrayIterator operator+(ArrayIterator it, difference_type d);
-        friend ArrayIterator operator+(difference_type d, ArrayIterator it);
-        friend ArrayIterator operator-(ArrayIterator it, difference_type d);
-        friend difference_type operator-(ArrayIterator lhs, ArrayIterator rhs);
-        auto operator<=>(const ArrayIterator& other) const = default;
-        std::pair<Key, Value>& operator*() const;
-        std::pair<Key, Value>* operator->() const;
-        std::pair<Key, Value>& operator[](difference_type d) const;
+        ArrayIterator& operator++() {
+            ++ptr;
+            return *this;
+        }
+
+        ArrayIterator operator++(int) {
+            ArrayIterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        ArrayIterator& operator--() {
+            --ptr;
+            return *this;
+        }
+
+        ArrayIterator operator--(int) {
+            ArrayIterator tmp = *this;
+            --(*this);
+            return tmp;
+        }
+
+        ArrayIterator& operator+=(difference_type d) {
+            ptr += d;
+            return *this;
+        }
+
+        ArrayIterator& operator-=(difference_type d) {
+            ptr -= d;
+            return *this;
+        }
+
+        friend ArrayIterator operator+(ArrayIterator it, difference_type d) {
+            return ArrayIterator(it.ptr + d);
+        }
+
+        friend ArrayIterator operator+(difference_type d, ArrayIterator it) {
+            return ArrayIterator(it.ptr + d);
+        }
+
+        friend ArrayIterator operator-(ArrayIterator it, difference_type d) {
+            return ArrayIterator(it.ptr - d);
+        }
+
+        friend difference_type operator-(const ArrayIterator& lhs, const ArrayIterator& rhs) {
+            return lhs.ptr - rhs.ptr;
+        }
+
+        bool operator==(const ArrayIterator& other) const {
+            return ptr == other.ptr;
+        }
+
+        bool operator!=(const ArrayIterator& other) const {
+            return ptr != other.ptr;
+        }
+
+        reference operator*() const {
+            return *ptr;
+        }
+
+        pointer operator->() const {
+            return ptr;
+        }
+
+        reference operator[](difference_type d) const {
+            return *(ptr + d);
+        }
 
     private:
-        std::pair<Key, Value>* ptr;
+        pointer ptr;
     };
 
-    using value_type = std::pair<Key, Value>;
     using iterator = ArrayIterator;
-    // Normally there would also be a const_iterator
 
-    ArrayIterator begin();
-    ArrayIterator end();
-    Value& operator[](const Key& key);
+    MapArray() = default;
+
+    iterator begin() {
+        return iterator(data.data());
+    }
+
+    iterator end() {
+        return iterator(data.data() + data.size());
+    }
+
+    Value& operator[](const Key& key) {
+        auto it = std::lower_bound(begin(), end(), std::make_pair(key, Value()),
+            [](const value_type& a, const Key& k) { return a.first < k; });
+
+        if (it == end() || it->first != key) {
+            it = data.insert(it.base(), std::make_pair(key, Value()));
+        }
+
+        return it->second;
+    }
 
 private:
     std::vector<std::pair<Key, Value>> data;
