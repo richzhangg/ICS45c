@@ -106,15 +106,17 @@ public:
     }
 
     Value& operator[](const Key& key) {
-        auto it = std::lower_bound(begin(), end(), std::make_pair(key, Value()),
-            [](const value_type& a, const Key& k) { return a.first < k; });
+    auto pairKey = std::make_pair(key, Value());
+    auto comp = [](const value_type& a, const value_type& b) { return a.first < b.first; };
+    auto it = std::lower_bound(begin(), end(), pairKey, comp);
 
-        if (it == end() || it->first != key) {
-            it = data.insert(it.base(), std::make_pair(key, Value()));
-        }
-
-        return it->second;
+    if (it == end() || it->first != key) {
+        it = data.insert(it.base(), std::make_pair(key, Value()));
     }
+
+    return it->second;
+}
+
 private:
     std::vector<std::pair<Key, Value>> data;
 };
