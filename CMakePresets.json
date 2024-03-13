@@ -39,7 +39,7 @@
             "displayName": "Linux Default",
             "description": "Default build settings for Linux using GCC & GDB in Debug mode",
             "cacheVariables": {
-                               "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address,undefined -fsanitize-recover=all"
+                              
             }
         },
         {
