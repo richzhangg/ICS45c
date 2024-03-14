@@ -12,12 +12,11 @@ class MapArray {
 public:
     class ArrayIterator {
     public:
-        // Iterator traits
         using iterator_category = std::random_access_iterator_tag;
         using value_type = std::pair<Key, Value>;
         using difference_type = std::ptrdiff_t;
-        using pointer = std::pair<Key, Value>*;
-        using reference = std::pair<Key, Value>&;
+        using pointer = value_type*;
+        using reference = value_type&;
 
         explicit ArrayIterator(pointer ptr = nullptr) : ptr(ptr) {}
 
@@ -32,15 +31,15 @@ public:
         }
 
         ArrayIterator operator++(int) {
-            ArrayIterator tmp = *this;
+            ArrayIterator temp = *this;
             ++(*this);
-            return tmp;
+            return temp;
         }
 
         ArrayIterator operator--(int) {
-            ArrayIterator tmp = *this;
+            ArrayIterator temp = *this;
             --(*this);
-            return tmp;
+            return temp;
         }
 
         ArrayIterator& operator+=(difference_type d) {
@@ -72,11 +71,11 @@ public:
         auto operator<=>(const ArrayIterator& other) const = default;
 
         reference operator*() const {
-            return &(ptr -> data);
+            return *ptr;
         }
 
         pointer operator->() const {
-            return ptr -> data;
+            return ptr;
         }
 
         reference operator[](difference_type d) const {
@@ -88,6 +87,7 @@ public:
     };
 
     using iterator = ArrayIterator;
+    using value_type = std::pair<Key, Value>;
 
     iterator begin() {
         return iterator(data.data());
@@ -98,20 +98,22 @@ public:
     }
 
     Value& operator[](const Key& key) {
-    auto pairKey = std::make_pair(key, Value());
-    auto comp = [](const value_type& a, const value_type& b) { return a.first < b.first; };
-    auto it = std::lower_bound(begin(), end(), pairKey, comp);
+    auto it = std::lower_bound(begin(), end(), std::make_pair(key, Value{}),
+                               [](const value_type& a, const value_type& b) { return a.first < b.first; });
+
+    auto index = it - begin();
 
     if (it == end() || it->first != key) {
-        it = data.insert(it.base(), std::make_pair(key, Value()));
+        data.insert(data.begin() + index, std::make_pair(key, Value{}));
+        it = begin() + index;
     }
-
     return it->second;
 }
 
+
 private:
-   std::vector<typename MapArray<Key, Value>::value_type> data;
+    std::vector<value_type> data;
 };
 
-#endif // MAP_ARRAY_HPP
+#endif
 
