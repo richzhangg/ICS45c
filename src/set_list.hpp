@@ -86,12 +86,13 @@ public:
     }
 
     iterator insert(T value) {
-        if (!contains(value)) {
-            auto newNode = std::make_shared<ListNode>(ListNode{value, head});
-            head = newNode;
-        }
-        return begin();
+    if (!contains(value)) {
+        auto newNode = std::make_shared<ListNode>(ListNode{std::move(value), head});
+        head = std::move(newNode);
     }
+    return begin();
+	}
+
 
 private:
     std::shared_ptr<ListNode> head = nullptr;
