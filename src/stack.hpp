@@ -39,13 +39,17 @@ public:
 	{
 		if(_top == -1) {
 			return true;
-		} 
+		} else {
+		return false;
+		}
 	}
 	// return true if this stack is full
 	bool isFull() 
 	{
 		if(_top == STK_MAX -1) {
 			return true;
+		} else {
+		return false;
 		}
 	}
 };
