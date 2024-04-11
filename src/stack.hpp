@@ -44,9 +44,9 @@ public:
 
 // pushes all the characters from string line onto the Stack stk
 void push_all(Stack &stk, string line) {
-    for (int c = 0; c < line.size(); ++c) {
-        stk.push(line[c]);
-    }
+    for (char c : line) {
+		stk.push(c);
+	}
 }
 
 // pops characters from stk and prints to cout
