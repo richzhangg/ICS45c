@@ -1,3 +1,5 @@
+#include <iostream>
+using namespace std;
 constexpr int STK_MAX = 1000;
 
 class Stack
@@ -6,16 +8,16 @@ class Stack
 	char buf[STK_MAX];
 public:
 	// constructs this Stack
-	Stack() {}
+	Stack() {
+		_top = -1;
+	}
 	// adds c to the top of this Stack
 	void push(char c)
 	{
 		if(!isFull()) {
 			_top++;
 			buf[_top] = c;
-		} else {
-		std::cout << "error" << std::endl;
-		}
+		} 
 	}
 	// removes and returns the top character of this Stack
 	char pop()
@@ -55,18 +57,19 @@ public:
 };
 
 // pushes all the characters from string line onto the Stack stk
-void push_all(Stack & stk, string line)
+void push_all(Stack & stk, const std::string &line)
 {
 	for (char c : line) {
 		stk.push(c);
 	}
 }
+
 // pops characters from stk and prints to cout
 // all chars will be on the same line without any extra spaces
 void pop_all(Stack & stk)
 {
 	while (!stk.isEmpty()) {
-		cout << stk.pop();
+		std::cout << stk.pop();
 	}
-	cout << endl;
+	std::cout << std::endl;
 }
