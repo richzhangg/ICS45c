@@ -11,21 +11,58 @@ public:
 	void push(char c)
 	{
 		if(!isFull()) {
-			
+			_top++;
+			buf[_top] = c;
+		} else {
+		std::cout << "error" << std::endl;
 		}
 	}
 	// removes and returns the top character of this Stack
-	char pop();
+	char pop()
+	{
+		if(!isEmpty()) {
+			_top--;
+			return buf[_top];
+		}
+		return '@';
+	}
 	// peeks at the top char and returns it without removing
-	char top();
+	char top()
+	{
+		if(!isEmpty()) {
+			return buf[_top];
+		}
+		return '@';
+	}
 	// return true if this stack is empty
-	bool isEmpty();
+	bool isEmpty() 
+	{
+		if(_top == -1) {
+			return true;
+		} 
+	}
 	// return true if this stack is full
-	bool isFull();
+	bool isFull() 
+	{
+		if(_top == STK_MAX -1) {
+			return true;
+		}
+	}
 };
 
 // pushes all the characters from string line onto the Stack stk
-void push_all(Stack & stk, string line);
+void push_all(Stack & stk, string line)
+{
+	for (char c : line) {
+		stk.push(c);
+	}
+}
 // pops characters from stk and prints to cout
 // all chars will be on the same line without any extra spaces
-void pop_all(Stack & stk);
+void pop_all(Stack & stk)
+{
+	while (!stk.isEmpty()) {
+		cout << stk.pop();
+	}
+	cout << endl;
+}
