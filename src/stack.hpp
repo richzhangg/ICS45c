@@ -18,7 +18,7 @@ public:
             buf[_top] = c;
         }
     }
-	// removes and returns the top character fo this Stack
+	// removes and returns the top character of this Stack
     char pop() {
         if (!isEmpty()) {
             return buf[_top--];
