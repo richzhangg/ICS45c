@@ -89,9 +89,9 @@ Coins ask_for_coins(std::istream& in, std::ostream& out) {
 }
 
 void coins_menu(std::istream& in, std::ostream& out) {
-	Coins bank(0, 0, 0, 0);
+	Coins myCoins(0, 0, 0, 0);
     
-    int choice;
+    char choice;
     do {
         out << "Coins Menu\n";
         out << "1. Deposit Change\n";
@@ -102,17 +102,17 @@ void coins_menu(std::istream& in, std::ostream& out) {
         in >> choice;
         
         switch(choice) {
-            case 1: {
-                Coins deposit = ask_for_coins(in, out);
-                bank.deposit_coins(deposit);
+            case '1': {
+                Coins deposit = ask_for_coins(out, in);
+                myCoins.deposit_coins(deposit);
                 out << "Thank you!";
 				out << "\n";
                 break;
             }
-            case 2: {
-                Coins extract = ask_for_coins(in, out);
-                if (bank.has_exact_change_for_coins(extract)) {
-                    bank.extract_exact_change(extract);	
+            case '2': {
+                Coins extraction = ask_for_coins(out, in);
+                if (myCoins.has_exact_change_for_coins(extraction)) {
+                    myCoins.extract_exact_change(extraction);	
 					out << "Thank you!";
 					out << "\n";
                 } else {
@@ -120,14 +120,14 @@ void coins_menu(std::istream& in, std::ostream& out) {
                 }
                 break;
             }
-            case 3: {
-                print_cents(bank.total_value_in_cents(), out);
+            case '3': {
+                print_cents(myCoins.total_value_in_cents(), out);
                 out << "\n";
 				out << "Thank you!";
 				out << "\n";
                 break;
             }
-            case 4:
+            case '4':
                 break;
             default:
                 out << "ERROR: Invalid Command\n";
