@@ -103,15 +103,15 @@ void coins_menu(std::istream& in, std::ostream& out) {
         switch(choice) {
             case '1': {
 				Coins deposit = ask_for_coins(in, out);
-                myCoins.deposit_coins(deposit);
+                bank.deposit_coins(deposit);
                 out << "Thank you!";
 				out << "\n";
                 break;
             }
             case '2': {
-                Coins extraction = ask_for_coins(in, out);
-                if (myCoins.has_exact_change_for_coins(extraction)) {
-                    myCoins.extract_exact_change(extraction);	
+                Coins extract = ask_for_coins(in, out);
+                if (bank.has_exact_change_for_coins(extract)) {
+                    bank.extract_exact_change(extract);	
 					out << "Thank you!";
 					out << "\n";
                 } else {
@@ -120,7 +120,7 @@ void coins_menu(std::istream& in, std::ostream& out) {
                 break;
             }
             case '3': {
-                print_cents(myCoins.total_value_in_cents(), out);
+                print_cents(bank.total_value_in_cents(), out);
                 out << "\n";
 				out << "Thank you!";
 				out << "\n";
