@@ -103,14 +103,14 @@ void coins_menu(std::istream& in, std::ostream& out) {
         
         switch(choice) {
             case '1': {
-                Coins deposit = ask_for_coins(out, in);
+u                Coins deposit = ask_for_coins(in, out);
                 myCoins.deposit_coins(deposit);
                 out << "Thank you!";
 				out << "\n";
                 break;
             }
             case '2': {
-                Coins extraction = ask_for_coins(out, in);
+                Coins extraction = ask_for_coins(in, out);
                 if (myCoins.has_exact_change_for_coins(extraction)) {
                     myCoins.extract_exact_change(extraction);	
 					out << "Thank you!";
