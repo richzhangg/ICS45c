@@ -8,10 +8,10 @@ using namespace std;
 Coins::Coins(int q, int d, int n, int p): quarters(q), dimes(d), nickels(n), pennies(p) {}
 
 void Coins::deposit_coins(Coins& coins) {
-	quarters = coins.quarters;
-	dimes = coins.dimes;
-	nickels = coins.nickels;
-	pennies = coins.pennies;
+	quarters += coins.quarters;
+	dimes += coins.dimes;
+	nickels += coins.nickels;
+	pennies += coins.pennies;
 	coins.quarters = 0;
 	coins.dimes = 0;
 	coins.nickels = 0;
@@ -84,7 +84,7 @@ Coins ask_for_coins(std::istream& in, std::ostream& out) {
 	out << "Nickels? ";
 	in >> nickels;
 	out << "Pennies? ";
-	out >> pennies;
+	out << pennies;
 	return Coins(quarters, dimes, nickels, pennies);
 }
 

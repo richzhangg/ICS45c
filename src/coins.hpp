@@ -9,7 +9,7 @@
 
 // Some useful constants for conversions - don't use magic numbers in your code!
 constexpr int CENTS_PER_QUARTER = 25;
-constexpr int CENTS_PER DIME = 10;
+constexpr int CENTS_PER_DIME = 10;
 constexpr int CENTS_PER_NICKEL = 5;
 
 class Coins {
