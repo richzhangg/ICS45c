@@ -91,7 +91,8 @@ Coins ask_for_coins(std::istream& in, std::ostream& out) {
 void coins_menu(std::istream& in, std::ostream& out) {
 	Coins bank(0, 0, 0, 0);
     char choice;
-    do {
+
+    while (true) {
         out << "Coins Menu\n";
         out << "1. Deposit Change\n";
         out << "2. Extract Change\n";
@@ -99,21 +100,21 @@ void coins_menu(std::istream& in, std::ostream& out) {
         out << "4. Exit\n";
         out << "User Input: ";
         in >> choice;
-        
-        switch(choice) {
+
+        if (choice == '4') break;
+
+        switch (choice) {
             case '1': {
-				Coins deposit = ask_for_coins(in, out);
+                Coins deposit = ask_for_coins(in, out);
                 bank.deposit_coins(deposit);
-                out << "Thank you!";
-				out << "\n";
+                out << "Thank you!\n";
                 break;
             }
             case '2': {
                 Coins extract = ask_for_coins(in, out);
                 if (bank.has_exact_change_for_coins(extract)) {
-                    bank.extract_exact_change(extract);	
-					out << "Thank you!";
-					out << "\n";
+                    bank.extract_exact_change(extract);
+                    out << "Thank you!\n";
                 } else {
                     out << "ERROR: Insufficient Funds\n";
                 }
@@ -121,15 +122,11 @@ void coins_menu(std::istream& in, std::ostream& out) {
             }
             case '3': {
                 print_cents(bank.total_value_in_cents(), out);
-                out << "\n";
-				out << "Thank you!";
-				out << "\n";
+                out << "Thank you!\n";
                 break;
             }
-            case '4':
-                break;
             default:
                 out << "ERROR: Invalid Command\n";
         }
-    } while (choice != '4');
+    }
 }
