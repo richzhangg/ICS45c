@@ -84,52 +84,53 @@ Coins ask_for_coins(std::istream& in, std::ostream& out) {
 	out << "Nickels? ";
 	in >> nickels;
 	out << "Pennies? ";
-	out << pennies;
+	in >> pennies;
 	return Coins(quarters, dimes, nickels, pennies);
 }
 
 void coins_menu(std::istream& in, std::ostream& out) {
-	Coins bank(0,0,0,0);
-	out << "Coins Menu" << endl;
-	out << endl;
-
-	int choice = 0;
-	while (choice != 4) {
-		out << "1. Deposit Change" << endl;
-		out << "2. Extract Change" << endl;
-		out << "3. Print Balance" << endl;
-		out << "4. Exit" << endl;
-		out << endl;
-		out << "User Input: ";
-		in >> choice;
-
-		if (choice == 1) {
-			Coins deposit = ask_for_coins(in, out);
-			bank.deposit_coins(deposit);
-			out << endl;
-            out << "Thank you!" << endl;
-            out << endl;
-		} else if (choice == 2) {
-			Coins extract = ask_for_coins(in, out);
-			out << endl;
-            out << "Thank you!" << endl;
-            out << endl;
-			if (extract.has_exact_change_for_coins(bank)) {
-				bank.extract_exact_change(extract);
-			} else {
-				out << "ERROR: Insufficient Funds" << endl;
-			}
-		} else if (choice == 3) {
-			print_cents(bank.total_value_in_cents(), out);
-			out << endl;
-			out << endl;
-            out << "Thank you!" << endl;
-            out << endl;
-		} else if (choice == 4) {
-			break;
-		} else {
-			out << "ERROR: Invalid Command" << endl;
-			out << endl;
-		}
-	}
+	Coins bank(0, 0, 0, 0);
+    
+    int choice;
+    do {
+        out << "Coins Menu\n";
+        out << "1. Deposit Change\n";
+        out << "2. Extract Change\n";
+        out << "3. Print Balance\n";
+        out << "4. Exit\n";
+        out << "User Input: ";
+        in >> choice;
+        
+        switch(choice) {
+            case 1: {
+                Coins deposit = ask_for_coins(in, out);
+                bank.deposit_coins(deposit);
+                out << "Thank you!";
+				out << "\n";
+                break;
+            }
+            case 2: {
+                Coins extract = ask_for_coins(in, out);
+                if (bank.has_exact_change_for_coins(extract)) {
+                    bank.extract_exact_change(extract);	
+					out << "Thank you!";
+					out << "\n";
+                } else {
+                    out << "ERROR: Insufficient Funds\n";
+                }
+                break;
+            }
+            case 3: {
+                print_cents(bank.total_value_in_cents(), out);
+                out << "\n";
+				out << "Thank you!";
+				out << "\n";
+                break;
+            }
+            case 4:
+                break;
+            default:
+                out << "ERROR: Invalid Command\n";
+        }
+    } while (choice != '4');
 }
