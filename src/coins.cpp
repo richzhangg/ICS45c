@@ -89,8 +89,7 @@ Coins ask_for_coins(std::istream& in, std::ostream& out) {
 }
 
 void coins_menu(std::istream& in, std::ostream& out) {
-	Coins myCoins(0, 0, 0, 0);
-    
+	Coins bank(0, 0, 0, 0);
     char choice;
     do {
         out << "Coins Menu\n";
@@ -103,7 +102,7 @@ void coins_menu(std::istream& in, std::ostream& out) {
         
         switch(choice) {
             case '1': {
-u                Coins deposit = ask_for_coins(in, out);
+				Coins deposit = ask_for_coins(in, out);
                 myCoins.deposit_coins(deposit);
                 out << "Thank you!";
 				out << "\n";
