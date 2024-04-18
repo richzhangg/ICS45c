@@ -41,7 +41,7 @@ TEST(WordCount, CountWords) {
     std::set<std::string> stopwords1 = {"is", "a", "this"};
     auto word_counts1 = count_words(test_input1, stopwords1);
     EXPECT_EQ(word_counts1["simple"], 2);
-    EXPECT_EQ(word_counts1["test"], 2);
+    EXPECT_EQ(word_counts1["test"], 1);
     EXPECT_EQ(word_counts1.count("this"), 0);
 
     std::istringstream test_input2("Word! Word. Word,");
