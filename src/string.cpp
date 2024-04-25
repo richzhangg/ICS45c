@@ -102,15 +102,23 @@ String String::operator+(const String &s) const {
 
 // concatenate s onto the end of this string
 String &String::operator+=(const String &s) {
-	size_t current_length = strlen(buf);
-    size_t additional_length = strlen(s.buf);
-    size_t total_length = current_length + additional_length;
-    if (total_length >= MAXLEN) {
-        cout << "ERROR: String length exceeds maximum allowed." << endl;
-        return *this;
+	// Check if the instance is being appended to itself
+    if (this == &s) {
+        char *temp = new char[MAXLEN]; // Use dynamic allocation for the temporary buffer
+        int currentLength = strlen(this->buf);
+        strncpy(temp, this->buf, currentLength);
+        temp[currentLength] = '\0'; // Manually null-terminate
+        int spaceLeft = MAXLEN - currentLength - 1;
+        strncat(temp, s.buf, spaceLeft);
+        strncpy(this->buf, temp, MAXLEN - 1);
+        this->buf[MAXLEN - 1] = '\0'; // Ensure the buffer is null-terminated
+        delete[] temp; // Clean up the dynamically allocated memory
+    } else {
+        int currentLength = strlen(this->buf);
+        int spaceLeft = MAXLEN - currentLength - 1;
+        strncat(this->buf, s.buf, spaceLeft);
+        this->buf[MAXLEN - 1] = '\0'; // Ensure the buffer is null-terminated
     }
-    strncat(buf, s.buf, MAXLEN - current_length - 1);
-    buf[MAXLEN - 1] = '\0';
     return *this;
 }
 
