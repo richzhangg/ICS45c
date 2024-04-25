@@ -45,7 +45,7 @@ String String::reverse() {
 
 // returns index into this string for first occurrence of c
 int String::indexOf(char c) {
-	char *found = strchr(buf, c);
+	const char *found = strchr(buf, c);
 	if (found == nullptr) {
 		return -1;
 	}
@@ -54,7 +54,7 @@ int String::indexOf(char c) {
 
 // returns index into this string for first occurrence of s
 int String::indexOf(const String &s) {
-	char *found = strstr(buf, s.buf);
+	const char *found = strstr(buf, s.buf);
 	if (found == nullptr) {
 		return -1;
 	}
@@ -108,7 +108,7 @@ String &String::operator+=(const String &s) {
         cout << "ERROR";
         return *this;
     } else {
-        strncat(buf, s.buf, MAXLEN - currentLength - 1);
+        strncat(buf, s.buf, MAXLEN - current_length - 1);
         return *this;
     }
 }
@@ -130,13 +130,9 @@ void String::read(std::istream &in) {
 String::~String() {
 }
 
-bool String::in_bounds(int i) {
-	return i >= 0 && i < strlen(buf);
-}
-
 // These static helper methods would ultimately be private.
 // but are made public so that you (and the autograder) can test them.
-static int strlen(const char *s) {
+int String::strlen(const char *s) {
 	int length = 0;
     while (s[length] != '\0') {
         length++;
@@ -144,7 +140,7 @@ static int strlen(const char *s) {
     return length;
 }
 
-static char *strcpy(char *dest, const char *src) {
+char *String::strcpy(char *dest, const char *src) {
 	int pos = 0;
     while (src[pos] != '\0') {
         dest[pos] = src[pos];
@@ -154,7 +150,7 @@ static char *strcpy(char *dest, const char *src) {
 	return dest;
 }
 
-static char *strncpy(char *dest, const char *src, int n) {
+char *String::strncpy(char *dest, const char *src, int n) {
 	int index = 0;
     while (index < n && src[index] != '\0') {
         dest[index] = src[index];
@@ -166,13 +162,101 @@ static char *strncpy(char *dest, const char *src, int n) {
     return dest;
 }
 
-static char *strcat(char *dest, const char *src);
-static char *strncat(char *dest, const char *src, int n);
-static int strcmp(const char *left, const char *right);
-static int strncmp(const char *left, const char *right, int n);
-static void reverse_cpy(char *dest, const char *src);
-static const char *strchr(const char *str, char c);
-static const char *strstr(const char *haystack, const char *needle);
+char *String::strcat(char *dest, const char *src) {
+	int dest_end = strlen(dest);
+    int source_index = 0;
+    while (src[source_index] != '\0') {
+        dest[dest_end + source_index] = src[source_index];
+        source_index++;
+    }
+    dest[dest_end + source_index] = '\0';
+    return dest;
+}
 
-std::ostream &operator<<(std::ostream &out, const String &s);
-std::istream &operator>>(std::istream &in, String &s);
+char *String::strncat(char *dest, const char *src, int n) {
+	int dest_length = strlen(dest);
+    int count = 0;
+    while (count < n && src[count] != '\0') {
+        dest[dest_length + count] = src[count];
+        count++;
+    }
+    dest[dest_length + count] = '\0';
+    return dest;
+}
+
+int String::strcmp(const char *left, const char *right) {
+    for (int i = 0; left[i] != '\0' || right[i] != '\0'; ++i) {
+        if (left[i] < right[i]) {
+            return -1;
+        } else if (left[i] > right[i]) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int String::strncmp(const char *left, const char *right, int n) {
+	if (n == 0) {
+        return 0;
+    }
+    for (int i = 0; i < n; ++i) {
+        if (left[i] != right[i]) {
+            if (left[i] == '\0' || right[i] == '\0') {
+                return (unsigned char)left[i] - (unsigned char)right[i];
+            }
+            return (left[i] < right[i]) ? -1 : 1;
+        }
+        if (left[i] == '\0') {
+            return 0;
+        }
+    }
+    return 0;
+}
+
+
+void String::reverse_cpy(char *dest, const char *src) {
+	int src_length = strlen(src);
+    int reverse_index = 0;
+    for (int i = src_length - 1; i >= 0; --i) {
+        dest[reverse_index++] = src[i];
+    }
+    dest[reverse_index] = '\0';
+}
+
+const char *String::strchr(const char *str, char c) {
+	for (int i = 0; str[i] != '\0'; ++i) {
+        if (str[i] == c) {
+            return &str[i];
+        }
+    }
+    if (c == '\0') {
+        return &str[strlen(str)];
+	}
+    return nullptr;
+}
+
+const char *String::strstr(const char *haystack, const char *needle) {
+	int needle_len = strlen(needle);
+    if (needle_len == 0) {
+        return haystack;
+    }
+
+    for (const char *p = haystack; *p != '\0'; p++) {
+		if (*p == needle[0]) {
+            if (strncmp(p, needle, needle_len) == 0) {
+                return p;
+            }
+        }
+    }
+    return nullptr;
+}
+
+ostream &operator<<(ostream &out, const String &s) {
+	s.print(out);
+	return out;
+}
+
+istream &operator>>(istream &in, String &s) {
+	s.read(in);
+	return in;
+}
