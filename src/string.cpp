@@ -1,249 +1,262 @@
 #include "string.hpp"
-#include <iostream>
 
+#include <iostream>
 
 using namespace std;
 
+// constructs this string from a C string, defaults to empty string
+String::String(const char *s) {
+	strncpy(buf, s, MAXLEN-1);
+}
 
+// construct this string as a copy iof string s
+String::String(const String &s) {
+	strcpy(buf, s.buf);
+}
+
+// asignment operator from one string, s, to this string
+String &String::operator=(const String &s) {
+	strcpy(buf, s.buf);
+	return *this;
+}
+
+// allow indexing this string with notation s[i] 
+// COME TO THIS ONE IF NEEDED
+char &String::operator[](int index) {
+	if (!in_bounds(index)) {
+        cout << "ERROR: Index Out Of Bounds" << endl;
+        static char errorChar = '\0';
+        return errorChar;
+    }
+    return buf[index];}
+
+// returns the logical length of this string (# of chars up to '\0')
+int String::size() const {
+	return strlen(buf);
+}
+
+// returns a reversal of this string, does not modify this string
+String String::reverse() const {
+	String output;
+	reverse_cpy(output.buf, buf);
+	return output;
+}
+
+// returns index into this string for first occurrence of c
+int String::indexOf(char c) const {
+	const char *found = strchr(buf, c);
+	if (found == nullptr) {
+		return -1;
+	}
+	return found - buf;
+}
+
+// returns index into this string for first occurrence of s
+int String::indexOf(const String &s) const {
+	const char *found = strstr(buf, s.buf);
+	if (found == nullptr) {
+		return -1;
+	}
+	return found - buf;
+}
+
+// relational operators for comparing this strings to another string
+bool String::operator==(const String &s) const {
+	return (strcmp(buf, s.buf) == 0);
+}
+
+bool String::operator!=(const String &s) const{
+	return (strcmp(buf, s.buf) != 0);
+}
+
+bool String::operator>(const String &s) const {
+	return (strcmp(buf, s.buf) > 0);
+}
+
+bool String::operator<(const String &s) const {
+	return (strcmp(buf, s.buf) < 0);
+}
+
+bool String::operator<=(const String &s) const {
+	return (strcmp(buf, s.buf) <= 0);
+}
+
+bool String::operator>=(const String &s) const {
+	return (strcmp(buf, s.buf) >= 0);
+}
+
+// concatenate this and s to form a return string
+String String::operator+(const String &s) const {
+    int combined_length = strlen(buf) + strlen(s.buf);
+    if (combined_length >= MAXLEN) {
+        cout << "ERROR";
+        return *this;
+    } else {
+        String result;
+        strcpy(result.buf, this->buf);
+        strncat(result.buf, s.buf, MAXLEN - strlen(result.buf) - 1);
+        return result;
+    }
+}
+
+// concatenate s onto the end of this string
+String &String::operator+=(const String &s) {
+    String intermediate("");
+    int remainingCapacity = MAXLEN - 1 - String::strlen(this->buf);
+    if (remainingCapacity > 0) {
+		String::strcat(intermediate.buf, this->buf);
+        String::strncat(intermediate.buf, s.buf, remainingCapacity);
+        String::strcpy(this->buf, intermediate.buf);
+    } else {
+        cout << "ERROR" << endl;
+    }
+    return *this;
+}
+
+// print this string, hint: use operator << to send buf to out
+void String::print(std::ostream &out) const {
+	for (int i=0; buf[i] != '\0'; ++i){
+		out << buf[i];
+	}
+}
+
+// read next word into this string
+// hint: use operator >> to read from in into buf
+void String::read(std::istream &in) {
+	in >> buf;
+}
+
+// destructor for this string
+String::~String() {
+}
+
+// These static helper methods would ultimately be private.
+// but are made public so that you (and the autograder) can test them.
 int String::strlen(const char *s) {
-    int i;
-    for (i=0; s[i] != '\0'; ++i) {}
-    return i;
+	int length = 0;
+    while (s[length] != '\0') {
+        length++;
+    }
+    return length;
 }
 
-char* String::strcpy(char *dest, const char *src) {
-    int i;
-    for (i=0; src[i] != '\0'; ++i) {
-        dest[i] = src[i];
+char *String::strcpy(char *dest, const char *src) {
+	int pos = 0;
+    while (src[pos] != '\0') {
+        dest[pos] = src[pos];
+        pos++;
     }
-    dest[i] = '\0';
+    dest[pos] = '\0';
+	return dest;
+}
+
+char *String::strncpy(char *dest, const char *src, int n) {
+	int index = 0;
+    while (index < n && src[index] != '\0') {
+        dest[index] = src[index];
+        ++index;
+    }
+    for (; index < n; ++index) {
+        dest[index] = '\0';
+    }
     return dest;
 }
 
-char* String::strncpy(char *dest, const char *src, int n) {
-    int i;
-    for (i=0; i<n && src[i] != '\0'; ++i) {
-        dest[i] = src[i];
+char *String::strcat(char *dest, const char *src) {
+	int dest_end = strlen(dest);
+    int source_index = 0;
+    while (src[source_index] != '\0') {
+        dest[dest_end + source_index] = src[source_index];
+        source_index++;
     }
-    dest[i] = '\0';
+    dest[dest_end + source_index] = '\0';
     return dest;
 }
 
-char* String::strcat(char *dest, const char *src) {
-    int i = String::strlen(dest);
-    for (int j=0; src[j] != '\0'; ++j) {
-        dest[i] = src[j];
-        ++i;
+char *String::strncat(char *dest, const char *src, int n) {
+	int dest_length = strlen(dest);
+    int count = 0;
+    while (count < n && src[count] != '\0') {
+        dest[dest_length + count] = src[count];
+        count++;
     }
-    dest[i] = '\0';
-    return dest;
-}
-
-char* String::strncat(char *dest, const char *src, int n) {
-    int i = String::strlen(dest);
-    for (int j=0; j<n && src[j] != '\0'; ++j) {
-        dest[i] = src[j];
-        ++i;
-    }
-    dest[i] = '\0';
+    dest[dest_length + count] = '\0';
     return dest;
 }
 
 int String::strcmp(const char *left, const char *right) {
-    int i=0;
-    for (; left[i] != '\0' && right[i] != '\0'; ++i) {
-        if (left[i] != right[i])
-            return (left[i] - right[i]);
+    for (int i = 0; left[i] != '\0' || right[i] != '\0'; ++i) {
+        if (left[i] < right[i]) {
+            return -1;
+        } else if (left[i] > right[i]) {
+            return 1;
+        }
     }
-    if (left[i] == right[i])
-        return 0;
-    else
-        return (left[i] - right[i]);
+    return 0;
 }
 
 int String::strncmp(const char *left, const char *right, int n) {
-    int i=0;
-    for (; i<n && left[i] != '\0'; ++i) {
-        if (left[i] != right[i])
-            return (left[i] - right[i]);
+	if (n == 0) {
+        return 0;
     }
-    if (i == n)
-        return 0;
-    else if (right[i] == '\0')
-        return 0;
-    else
-        return (left[i]-right[i]);
+    for (int i = 0; i < n; ++i) {
+        if (left[i] != right[i]) {
+            if (left[i] == '\0' || right[i] == '\0') {
+                return (unsigned char)left[i] - (unsigned char)right[i];
+            }
+            return (left[i] < right[i]) ? -1 : 1;
+        }
+        if (left[i] == '\0') {
+            return 0;
+        }
+    }
+    return 0;
 }
 
-void String::reverse_cpy(char* dest, const char* src) {
-    int i = String::strlen(src)-1;
-    int j;
-    for (j=0; i>=0; --i) {
-        dest[j] = src[i];
-        ++j;
+
+void String::reverse_cpy(char *dest, const char *src) {
+	int src_length = strlen(src);
+    int reverse_index = 0;
+    for (int i = src_length - 1; i >= 0; --i) {
+        dest[reverse_index++] = src[i];
     }
-    dest[j] = '\0';
+    dest[reverse_index] = '\0';
 }
 
-const char* String::strchr(const char* str, char c) {
-    const char* ptr = nullptr;
-    int i;
-    for (i=0; str[i] != '\0'; ++i) {
+const char *String::strchr(const char *str, char c) {
+	for (int i = 0; str[i] != '\0'; ++i) {
         if (str[i] == c) {
-            ptr = &str[i];
-            break;
+            return &str[i];
         }
     }
-    if (c == '\0')
-        ptr = &str[i];
-    return ptr;
+    if (c == '\0') {
+        return &str[strlen(str)];
+	}
+    return nullptr;
 }
 
-const char* String::strstr(const char* haystack, const char* needle) {
-    const char* ptr = nullptr;
-    int needleLength = String::strlen(needle);
-    if (needleLength == 0) {
-        return haystack; // Returns the haystack pointer if needle is "".
+const char *String::strstr(const char *haystack, const char *needle) {
+	int needle_len = strlen(needle);
+    if (needle_len == 0) {
+        return haystack;
     }
-    int cycle = String::strlen(haystack)-needleLength+1;
-    for (int i=0; i<cycle; ++i) {
-        int step = 0;
-        for (; step<needleLength; ++step) {
-            if (haystack[i+step] != needle[step])
-                break; // Break out of the loop at a non-equal comparison.
-        }
-        if (step == needleLength) { // If that iteration was successful, i.e. str exist.
-            ptr = &haystack[i];
-            break;
+
+    for (const char *p = haystack; *p != '\0'; p++) {
+		if (*p == needle[0]) {
+            if (strncmp(p, needle, needle_len) == 0) {
+                return p;
+            }
         }
     }
-    return ptr;
+    return nullptr;
 }
 
-void String::print(std::ostream &out) const {
-    for (int i=0; buf[i] != '\0'; ++i)
-        out << buf[i];
+ostream &operator<<(ostream &out, const String &s) {
+	s.print(out);
+	return out;
 }
 
-std::ostream &operator<<(std::ostream &out, const String &s) {
-    s.print(out);
-    return out;
+istream &operator>>(istream &in, String &s) {
+	s.read(in);
+	return in;
 }
-
-String::String(const char *s) {
-    strncpy(buf, s, MAXLEN-1);
-}
-
-String::String(const String &s) {
-    strcpy(buf, s.buf);
-}
-
-int String::size() const {
-    return strlen(buf);
-}
-
-String::~String() {
-}
-
-bool String::operator==(const String &s) const {
-    if (String::strcmp(buf, s.buf) == 0) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-bool String::operator!=(const String &s) const {
-    return (!(String::strcmp(buf, s.buf) == 0));
-}
-
-bool String::operator>(const String &s) const {
-    return ((String::strcmp(buf, s.buf)) > 0);
-}
-
-bool String::operator<(const String &s) const {
-    return ((String::strcmp(buf, s.buf)) < 0);
-}
-
-bool String::operator<=(const String &s) const {
-    return ((String::strcmp(buf, s.buf)) <= 0);
-}
-
-bool String::operator>=(const String &s) const {
-    return ((String::strcmp(buf, s.buf)) >= 0);
-}
-
-String& String::operator=(const String &s) {
-    String::strcpy(buf, s.buf);
-    return *this;
-}
-
-char& String::operator[](int index) {
-    int n = String::strlen(buf);
-    if (0<index && index<n)
-        return buf[index];
-    else {
-        cout << "ERROR" << endl;
-        return buf[0];
-    }
-}
-
-String String::reverse() const {
-    String r;
-    String::reverse_cpy(r.buf, buf);
-    return r;
-}
-
-int String::indexOf(char c) const {
-    char* foundptr = (char*) String::strchr(buf, c);
-    if (foundptr == nullptr)
-        return -1;
-    int index = foundptr-buf;
-    return index;
-}
-
-int String::indexOf(const String &s) const {
-    char* otherbuf = (char*) s.buf;
-    char* foundptr = (char*) String::strstr(buf, otherbuf);
-    if (foundptr == nullptr)
-        return -1;
-    int index = foundptr-buf;
-    return index;
-}
-
-String String::operator+(const String &s) const {
-    String r(""); // Creates a new string object to copy this into.
-    int n = (MAXLEN-1)-String::strlen(buf); // Here, MAXLEN-1 denotes the logical length of a max string.
-    if (n<=0) // If buf is already at max length.
-        cout << "ERROR" << endl;
-    else {
-        String::strcat(r.buf, buf);
-        String::strncat(r.buf, s.buf, n);
-    }
-    return r;
-}
-
-String& String::operator+=(const String &s) {
-    String r(""); // Creates a new string object to copy this into.
-    int n = (MAXLEN-1)-String::strlen(buf); // Again, the logical length of a max string minus len of buf.
-    if (n<=0) // If buf is already at max length.
-        cout << "ERROR" << endl;
-    else {
-        String::strcat(r.buf, buf);
-        String::strncat(r.buf, s.buf, n); // Copying up to the string length difference.
-        String::strcpy(buf, r.buf);
-    }
-    return *this;
-}
-
-void String::read(std::istream &in) {
-    in >> buf;
-}
-
-std::istream &operator>>(std::istream &in, String &s) {
-    s.read(in); // As ED dicussion suggests, this does not create any errors.
-    return in;
-}
-
-
