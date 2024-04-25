@@ -101,26 +101,15 @@ String String::operator+(const String &s) const {
 
 // concatenate s onto the end of this string
 String &String::operator+=(const String &s) {
-	// Temporary string to manage intermediate results
     String intermediate("");
-
-    // Compute the maximum allowable characters to append
     int remainingCapacity = MAXLEN - 1 - String::strlen(this->buf);
-
-    // Check buffer capacity and handle accordingly
     if (remainingCapacity > 0) {
-        // Concatenate existing content to intermediate buffer
-        String::strcat(intermediate.buf, this->buf);
-        // Append new content up to the remaining capacity
+		String::strcat(intermediate.buf, this->buf);
         String::strncat(intermediate.buf, s.buf, remainingCapacity);
-        // Copy the concatenated result back to the original buffer
         String::strcpy(this->buf, intermediate.buf);
     } else {
-        // Output error if no space is left in the buffer
         cout << "ERROR" << endl;
     }
-
-    // Return a reference to the current object
     return *this;
 }
 
