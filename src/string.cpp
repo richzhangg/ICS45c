@@ -32,19 +32,19 @@ char &String::operator[](int index) {
 }
 
 // returns the logical length of this string (# of chars up to '\0')
-int String::size() {
+int String::size() const {
 	return strlen(buf);
 }
 
 // returns a reversal of this string, does not modify this string
-String String::reverse() {
+String String::reverse() const {
 	String output;
 	reverse_cpy(output.buf, buf);
 	return output;
 }
 
 // returns index into this string for first occurrence of c
-int String::indexOf(char c) {
+int String::indexOf(char c) const {
 	const char *found = strchr(buf, c);
 	if (found == nullptr) {
 		return -1;
@@ -53,7 +53,7 @@ int String::indexOf(char c) {
 }
 
 // returns index into this string for first occurrence of s
-int String::indexOf(const String &s) {
+int String::indexOf(const String &s) const {
 	const char *found = strstr(buf, s.buf);
 	if (found == nullptr) {
 		return -1;
@@ -87,7 +87,7 @@ bool String::operator>=(const String &s) const {
 }
 
 // concatenate this and s to form a return string
-String String::operator+(const String &s) {
+String String::operator+(const String &s) const {
     int combined_length = strlen(buf) + strlen(s.buf);
     if (combined_length >= MAXLEN) {
         cout << "ERROR";
