@@ -104,13 +104,14 @@ String String::operator+(const String &s) const {
 String &String::operator+=(const String &s) {
 	size_t current_length = strlen(buf);
     size_t additional_length = strlen(s.buf);
-    if (current_length + additional_length >= MAXLEN) {
-        cout << "ERROR";
-        return *this;
-    } else {
-        strncat(buf, s.buf, MAXLEN - current_length - 1);
+    size_t total_length = current_length + additional_length;
+    if (total_length >= MAXLEN) {
+        cout << "ERROR: String length exceeds maximum allowed." << endl;
         return *this;
     }
+    strncat(buf, s.buf, MAXLEN - current_length - 1);
+    buf[MAXLEN - 1] = '\0';
+    return *this;
 }
 
 // print this string, hint: use operator << to send buf to out
