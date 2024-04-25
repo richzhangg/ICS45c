@@ -22,8 +22,8 @@ String &String::operator=(const String &s) {
 
 // allow indexing this string with notation s[i] 
 // COME TO THIS ONE IF NEEDED
-char &String::operator[](int index) {
-	static char outOfBoundsChar = '\0';
+const char &String::operator[](int index) const {
+	static const char outOfBoundsChar = '\0';
 	if (index < 0 || index >= size()) {
 		cout << "ERROR: Index Out Of Bounds" << endl;
 		return outOfBoundsChar;
