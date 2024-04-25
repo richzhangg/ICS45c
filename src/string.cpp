@@ -101,15 +101,13 @@ String String::operator+(const String &s) const {
 
 // concatenate s onto the end of this string
 String &String::operator+=(const String &s) {
-	String r("");
-    int n = (MAXLEN-1)-String::strlen(buf);
-	if (n<=0)
-        cout << "ERROR" << endl;
-    else {
-        String::strcat(r.buf, buf);
-        String::strncat(r.buf, s.buf, n);
-        String::strcpy(buf, r.buf);
-    }
+	int currentLength = String::strlen(buf);
+    int spaceLeft = MAXLEN - 1 - currentLength;
+    if (spaceLeft <= 0) {
+		cout << "ERROR" << endl;
+    } else {
+        String::strncat(buf, s.buf, spaceLeft);
+	}
     return *this;
 }
 
