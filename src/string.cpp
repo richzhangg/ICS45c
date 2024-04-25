@@ -22,14 +22,13 @@ String &String::operator=(const String &s) {
 
 // allow indexing this string with notation s[i] 
 // COME TO THIS ONE IF NEEDED
-const char &String::operator[](int index) const {
-	static const char outOfBoundsChar = '\0';
-	if (index < 0 || index >= size()) {
-		cout << "ERROR: Index Out Of Bounds" << endl;
-		return outOfBoundsChar;
-	}
-	return buf[index];
-}
+char &String::operator[](int index) {
+	if (!in_bounds(index)) {
+        cout << "ERROR: Index Out Of Bounds" << endl;
+        static char errorChar = '\0';
+        return errorChar;
+    }
+    return buf[index];}
 
 // returns the logical length of this string (# of chars up to '\0')
 int String::size() const {
@@ -102,21 +101,14 @@ String String::operator+(const String &s) const {
 
 // concatenate s onto the end of this string
 String &String::operator+=(const String &s) {
-	if (s.size() + size() >= MAXLEN) {
-        std::cerr << "ERROR: String Capacity Exceeded" << std::endl;
-        return *this;
-    }
-    if (this == &s) {
-        char *temp = new char[MAXLEN];
-        strncpy(temp, this->buf, MAXLEN - 1);
-        temp[MAXLEN - 1] = '\0';
-        strncat(temp, s.buf, MAXLEN - strlen(temp) - 1);
-        strncpy(this->buf, temp, MAXLEN - 1);
-        this->buf[MAXLEN - 1] = '\0';
-        delete[] temp;
-    } else {
-        strncat(this->buf, s.buf, MAXLEN - strlen(this->buf) - 1);
-        this->buf[MAXLEN - 1] = '\0';
+	String r("");
+    int n = (MAXLEN-1)-String::strlen(buf);
+	if (n<=0)
+        cout << "ERROR" << endl;
+    else {
+        String::strcat(r.buf, buf);
+        String::strncat(r.buf, s.buf, n);
+        String::strcpy(buf, r.buf);
     }
     return *this;
 }

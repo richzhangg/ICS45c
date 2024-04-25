@@ -17,7 +17,7 @@ public:
 	String &operator=(const String &s);
 
 	// allow indexing this string with notation s[i]
-	const char &operator[](int index) const;
+	char &operator[](int index);
 
 	// returns the logical length of this string (# of chars up to '\0')
 	int size() const;
