@@ -102,22 +102,21 @@ String String::operator+(const String &s) const {
 
 // concatenate s onto the end of this string
 String &String::operator+=(const String &s) {
-	// Check if the instance is being appended to itself
+	if (s.size() + size() >= MAXLEN) {
+        std::cerr << "ERROR: String Capacity Exceeded" << std::endl;
+        return *this;
+    }
     if (this == &s) {
-        char *temp = new char[MAXLEN]; // Use dynamic allocation for the temporary buffer
-        int currentLength = strlen(this->buf);
-        strncpy(temp, this->buf, currentLength);
-        temp[currentLength] = '\0'; // Manually null-terminate
-        int spaceLeft = MAXLEN - currentLength - 1;
-        strncat(temp, s.buf, spaceLeft);
+        char *temp = new char[MAXLEN];
+        strncpy(temp, this->buf, MAXLEN - 1);
+        temp[MAXLEN - 1] = '\0';
+        strncat(temp, s.buf, MAXLEN - strlen(temp) - 1);
         strncpy(this->buf, temp, MAXLEN - 1);
-        this->buf[MAXLEN - 1] = '\0'; // Ensure the buffer is null-terminated
-        delete[] temp; // Clean up the dynamically allocated memory
+        this->buf[MAXLEN - 1] = '\0';
+        delete[] temp;
     } else {
-        int currentLength = strlen(this->buf);
-        int spaceLeft = MAXLEN - currentLength - 1;
-        strncat(this->buf, s.buf, spaceLeft);
-        this->buf[MAXLEN - 1] = '\0'; // Ensure the buffer is null-terminated
+        strncat(this->buf, s.buf, MAXLEN - strlen(this->buf) - 1);
+        this->buf[MAXLEN - 1] = '\0';
     }
     return *this;
 }
