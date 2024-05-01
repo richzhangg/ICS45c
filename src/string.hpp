@@ -16,11 +16,8 @@ public:
     // swap buf between this string and s using std::swap, explained later
     void swap(String &s);
 
-    String(String&& other) noexcept;
     // assignment operator from one string, s, to this string
-    String& operator=(const String& other);
-
-	String& operator=(String&& other) noexcept;
+    String &operator=(String s);
 
     // assign to this string by moving from string s
     // String &operator=(String &&s);
@@ -51,10 +48,10 @@ public:
     bool operator>=(String s) const;
 
     // concatenate this and s to form a return string
-    String operator+(const String& s) const;
+    String operator+(String s) const;
 
     // concatenate s onto the end of this string
-    String& operator+=(const String& s);
+    String &operator+=(String s);
 
     // print this string, hint: use operator << to send buf to out
     void print(std::ostream &out) const;
