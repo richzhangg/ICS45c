@@ -175,13 +175,11 @@ char *String::strdup(const char *src) {
 }
 
 char *String::strncpy(char *dest, const char *src, int n) {
-	int i = 0;
-    for (; i < n && src[i] != '\0'; ++i) {
+	int i;
+    for (i = 0; i < n && src[i] != '\0'; i++) {
         dest[i] = src[i];
     }
-    for (; i < n; ++i) {
-        dest[i] = '\0';
-    }
+    dest[i] = '\0';
     return dest;
 }
 
