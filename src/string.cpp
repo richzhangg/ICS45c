@@ -4,7 +4,7 @@ using namespace std;
 
 String::String(const char* s) : buf(strdup(s)) {}
 
-String::String(const String &s) : buf(strdup(s.buf) {}
+String::String(const String &s) : buf(strdup(s.buf)) {}
 
 String::String(String &&s) {
 	buf = s.buf;
@@ -58,13 +58,8 @@ int String::size() const {
 
 // come back if needed
 String String::reverse() const { 
-	int length = String::strlen(buf);
-    String rev(length + 1);
-    char* dest = rev.buf;
-    for (int i = 0; i < length; ++i) {
-        dest[i] = buf[length - 1 - i];
-    }
-    dest[length] = '\0';
+	String rev(strlen(buf)+1);
+    reverse_cpy(rev.buf, buf);
     return rev;
 }
 
@@ -109,9 +104,10 @@ bool String::operator>=(const String& s) const {
 }
 
 String String::operator+(const String& s) const {
-	int totalLength = strlen(buf) + strlen(s.buf);
-    String result(totalLength + 1);
-    strcpy(result.buf, buf);
+	int totalLength = strlen(buf) + strlen(s.buf) + 1;
+    String result(totalLength);
+    result.buf[0] = '\0';
+    strcat(result.buf, buf);
     strcat(result.buf, s.buf);
     return result;
 }
@@ -165,12 +161,107 @@ char *String::strcpy(char *dest, const char *src) {
 	return dest;
 }
 
-static char *strdup(const char *src);
-static char *strncpy(char *dest, const char *src, int n);
-static char *strcat(char *dest, const char *src);
-static char *strncat(char *dest, const char *src, int n);
-static int strcmp(const char *left, const char *right);
-static int strncmp(const char *left, const char *right, int n);
-static void reverse_cpy(char *dest, const char *src);
-static const char *strchr(const char *str, char c);
-static const char *strstr(const char *haystack, const char *needle);
+char *String::strdup(const char *src) {
+	char* newStr = new char[strlen(src) + 1];
+    if (newStr) {
+        strcpy(newStr, src);
+    }
+    return newStr;
+}
+
+char *String::strncpy(char *dest, const char *src, int n) {
+	int i;
+    for (i = 0; src[i] != '\0' && i < n; ++i) {
+        dest[i] = src[i];
+    }
+    while (i < n) {
+        dest[i++] = '\0';
+    }
+    return dest;
+}
+
+char *String::strcat(char *dest, const char *src) {
+    int dest_len = strlen(dest);
+    int index = 0;
+    for (int i = dest_len; src[index] != '\0'; ++i, ++index) {
+        dest[i] = src[index];
+    }
+    dest[dest_len + index] = '\0';
+    return dest;
+}
+
+// come back
+char *String::strncat(char *dest, const char *src, int n) {
+	int dest_len = strlen(dest);
+    int index = 0;
+    for (index = 0; src[index] != '\0' && index < n; ++index) {
+        dest[dest_len + index] = src[index];
+    }
+    dest[dest_len + index] = '\0';
+    return dest;
+}
+
+int String::strcmp(const char *left, const char *right) {
+	for (int i = 0; left[i] != '\0' || right[i] != '\0'; ++i) {
+        if (left[i] < right[i]) {
+            return -1;
+        } else if (left[i] > right[i]) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int String::strncmp(const char *left, const char *right, int n) {
+	for (int i = 0; i < n; ++i) {
+        if (left[i] == '\0' || right[i] == '\0' || left[i] != right[i]) {
+            return left[i] - right[i];
+        }
+    }
+    return 0;
+}
+
+void String::reverse_cpy(char *dest, const char *src) {
+	int length = strlen(src);
+    for (int i = 0; i < length; ++i) {
+        dest[i] = src[length - 1 - i];
+    }
+    dest[length] = '\0';
+}
+
+const char *String::strchr(const char *str, char c) {
+	for (int i = 0; str[i] != '\0'; ++i) {
+        if (str[i] == c) {
+            return &str[i];
+        }
+    }
+    if (c == '\0') {
+        return &str[strlen(str)];
+    }
+    return nullptr;
+}
+
+const char *String::strstr(const char *haystack, const char *needle) {
+	int needleLen = strlen(needle);
+    if (needleLen == 0) {
+        return haystack;
+    }
+    const char* p = haystack;
+    while ((p = strchr(p, needle[0])) != nullptr) {
+        if (strncmp(p, needle, needleLen) == 0) {
+            return p;
+        }
+        ++p;
+    }
+    return nullptr;
+}
+
+std::ostream &operator<<(std::ostream &out, String s) {
+	s.print(out);
+    return out;
+}
+
+std::istream &operator>>(std::istream &in, String &s) {
+	s.read(in);
+    return in;
+}
