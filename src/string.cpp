@@ -6,6 +6,11 @@ String::String(const char* s) : buf(strdup(s)) {}
 
 String::String(const String &s) : buf(strdup(s.buf)) {}
 
+String::String(int length) : buf(new char[length]) {
+    buf[0] = '\0';
+}
+
+
 String::String(String &&s) {
 	buf = s.buf;
 	s.buf = nullptr;
