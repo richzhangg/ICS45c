@@ -49,26 +49,27 @@ TEST(ListTests, Reverse) {
     list::free(singleElementHead);
 }
 
-TEST(ListTests, Appending) {
-    Node* const a = list::from_string("i");
-    Node* const b = list::from_string("i");
-    Node* const c = list::append(a, b);
-    Node* const d = list::append(a, a);
+TEST(ListOperations, Concatenation) {
+    Node* nodeX = list::from_string("x");
+    Node* nodeY = list::from_string("x");
+    Node* mergedXY = list::append(nodeX, nodeY);
+    Node* doubleX = list::append(nodeX, nodeX);
 
-    EXPECT_EQ(list::compare(c, d), 0);
-    list::free(a);
-    list::free(b);
-    list::free(c);
-    list::free(d);
+    EXPECT_EQ(list::compare(mergedXY, doubleX), 0);
+    list::free(nodeX);
+    list::free(nodeY);
+    list::free(mergedXY);
+    list::free(doubleX);
 
-    Node* const e = list::from_string("some");
-    Node* const f = list::from_string("thing");
-    Node* const g = list::append(e, f);
-    Node* const h = list::from_string("something");
+    Node* nodeAlpha = list::from_string("alpha");
+    Node* nodeBeta = list::from_string("beta");
+    Node* concatenatedAlphaBeta = list::append(nodeAlpha, nodeBeta);
+    Node* fullWord = list::from_string("alphabet");
 
-    EXPECT_EQ(list::compare(g, h), 0);
-    list::free(e);
-    list::free(f);
-    list::free(g);
-    list::free(h);
+    EXPECT_EQ(list::compare(concatenatedAlphaBeta, fullWord), 0);
+    list::free(nodeAlpha);
+    list::free(nodeBeta);
+    list::free(concatenatedAlphaBeta);
+    list::free(fullWord);
 }
+
