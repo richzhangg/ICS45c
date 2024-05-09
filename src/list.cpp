@@ -1,126 +1,167 @@
-#include "list.hpp"
-#include <string.h>
 #include <iostream>
+#include "list.hpp"
 using namespace std;
+using list::Node;
 
-list::Node* list::from_string(const char* s) {
-    Node* head = nullptr;
-    for (int i = strlen(s)-1; i >= 0; --i) {
-        Node* newNode = new Node;
-        newNode->data = s[i];
-        newNode->next = head;
-        head = newNode;
+Node* list::from_string(const char* s) {
+	Node* head = nullptr;
+    Node* current = nullptr;
+    while (*s != '\0') {
+        if (head == nullptr) {
+            head = new Node{*s, nullptr};
+            current = head;
+        } else {
+            current->next = new Node{*s, nullptr};
+            current = current->next;
+        }
+        s++;
     }
+    
     return head;
 }
 
 void list::free(Node* head) {
-    Node* current = head;
-    while (current != nullptr) {
-        Node* temp = current;
-        current = current->next;
-        delete temp;
+	while (head != nullptr) {
+        Node* toDelete = head;
+        head = head->next;
+        delete toDelete;
     }
 }
 
-
-void list::print(ostream& out, Node* head) {
-    Node* current = head;
-    for (; current != nullptr; current = current->next)
+void list::print(std::ostream& out, Node* head) {
+	Node* current = head;
+    while (current != nullptr) {
         out << current->data;
+        current = current->next;
+    }
 }
 
-
-int list::length(Node* head) {
-    if (head == nullptr) return 0;
-    else return 1 + list::length(head->next);
+Node* list::copy(Node* head) {
+	if (head == nullptr) {
+        return nullptr;
+    } else {
+        Node* newNode = new Node{head->data, list::copy(head->next)};
+        return newNode;
+    }
 }
-
-
-list::Node* list::copy(Node* head) {
-    return !head ? nullptr : new Node{head->data, list::copy(head->next)};
-}
-
 
 int list::compare(Node* lhs, Node* rhs) {
-    Node* l = lhs;
-    Node* r = rhs;
-    for(; l != nullptr && r != nullptr; l=l->next, r=r->next)
-        if (l->data < r->data) return -1;
-        else if (l->data > r->data) return 1;
-    if (l == nullptr && r != nullptr) return -1;
-    else if (l != nullptr && r == nullptr) return 1;
-    else return 0;
+	while (lhs != nullptr && rhs != nullptr) {
+        if (lhs->data != rhs->data) {
+            return lhs->data - rhs->data;
+        }
+        lhs = lhs->next;
+        rhs = rhs->next;
+    }
+	if (lhs == nullptr) {
+        return rhs == nullptr ? 0 : -rhs->data;
+    }
+    return lhs->data;
 }
 
-
 int list::compare(Node* lhs, Node* rhs, int n) {
-    Node* r = rhs;
-    Node* l = lhs;
-    for (int i = 0; i < n; ++i, l=l->next, r=r->next)
-        if (l == nullptr && r != nullptr) return -1;
-        else if (l != nullptr && r == nullptr) return 1;
-        else if (l == nullptr && r == nullptr) return 0;
-        else if (l->data < r->data) return -1;
-        else if (l->data > r->data) return 1;
+	while (n-- > 0) {
+        if (!lhs && rhs) return -1;
+        if (lhs && !rhs) return 1;
+        if (!lhs && !rhs) return 0;
+        if (lhs->data < rhs->data) return -1;
+        if (lhs->data > rhs->data) return 1;
+        lhs = lhs->next;
+        rhs = rhs->next;
+    }
     return 0;
 }
 
-
-list::Node* list::reverse(Node* head) {
-    Node* original = head;
-    Node* newHead = nullptr;
-    for(; original != nullptr; original=original->next) {
-        Node* newNode = new Node;
-        newNode->data = original->data;
-        newNode->next = newHead;
-        newHead = newNode;
+int list::length(Node* head) {
+	int count = 0;
+    Node* current = head;
+    while (current) {
+        count++;
+        current = current->next;
     }
-    return newHead;
+    return count;
 }
 
+Node* list::reverse(Node* head) {
+	Node* prev = nullptr;
+    Node* curr = head;
+    while (curr != nullptr) {
+        Node* nextNode = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = nextNode;
+    }
+    return prev;
+}
 
-list::Node* list::append(Node* lhs, Node* rhs) {
-    Node* newNode = nullptr;
-    if (lhs == nullptr && rhs == nullptr) return nullptr;
-    else if (lhs == nullptr && rhs != nullptr) newNode = new Node{rhs->data, list::append(lhs, rhs->next)};
-    else newNode = new Node{lhs->data, list::append(lhs->next, rhs)};
+Node* list::append(Node* lhs, Node* rhs) {
+	if (!lhs && !rhs) return nullptr;
+    Node* newNode = new Node{};
+    if (!lhs) {
+        newNode->data = rhs->data;
+        newNode->next = list::append(lhs, rhs->next);
+    } else {
+        newNode->data = lhs->data;
+        newNode->next = list::append(lhs->next, rhs);
+    }
     return newNode;
 }
 
-
 int list::index(Node* head, Node* node) {
-    int count = 0;
-    if (!node) return -1;
-    for(Node* p = head; p != nullptr; p=p->next)
-        if (p == node) return count;
-        else ++count;
+	if (node == nullptr) return -1;
+    Node* current = head;
+    int index = 0;
+    while (current != nullptr) {
+        if (current == node) return index;
+        current = current->next;
+        index++;
+    }
     return -1;
 }
 
-
-list::Node* list::find_char(Node* head, char c) {
-    if (!c) return nullptr;
-    for(Node* p = head; p != nullptr; p=p->next)
-        if (p->data == c) return p;
+Node* list::find_char(Node* head, char c) {
+	if (!c) return nullptr;
+    Node* p = head;
+    while (p) {
+        if (p->data == c)
+            return p;
+        p = p->next;
+    }
     return nullptr;
 }
 
+Node* list::find_list(Node* haystack, Node* needle) {
+	int needle_len = list::length(needle);
+    if (needle_len == 0) {
+        return haystack;
+    }
+    Node* current = haystack;
+    while (current = find_char(current, needle->data)) {
+        if (list::compare(current, needle, needle_len) == 0) {
+            return current;
+        }
+        current = current->next;
+    }
 
-list::Node* list::find_list(Node* haystack, Node* needle) {
-    int len = list::length(needle);
-    if (len == 0) return haystack;
-    for(Node* p = haystack; (p = find_char(p, needle->data)); p=p->next)
-        if (list::compare(p, needle, len) == 0) return p;
     return nullptr;
 }
 
-
-list::Node* list::nth(Node* head, int n) {
-    return !n ? head : list::nth(head->next, n-1);
+Node* list::nth(Node* head, int n) {
+	if (!head) {
+        return nullptr;
+    }
+    if (n == 0) {
+        return head;
+    }
+    return nth(head->next, n - 1);
 }
 
-
-list::Node* list::last(Node* head) {
-    return !head->next ? head : list::last(head->next);
+Node* list::last(Node* head) {
+	if (head == nullptr) {
+        return nullptr;
+    }
+    if (head->next == nullptr) {
+        return head;
+    }
+    return last(head->next);
 }
