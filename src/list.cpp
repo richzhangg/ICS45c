@@ -1,6 +1,5 @@
 #include <iostream>
 #include "list.hpp"
-#include <string.hpp>
 using namespace std;
 using list::Node;
 
