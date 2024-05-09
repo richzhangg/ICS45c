@@ -106,3 +106,24 @@ TEST(ListTests, Print) {
     EXPECT_EQ("", emptyOutput.str());
     list::free(emptyList);
 }
+
+TEST(ListTests, CompareStrings) {
+    Node* const head1 = list::from_string("apple");
+    Node* const head2 = list::from_string("apple");
+    EXPECT_EQ(list::compare(head1, head2), 0);
+    list::free(head2);
+
+    Node* const head3 = list::from_string("orange");
+    Node* const head4 = list::from_string("banana");
+    EXPECT_LT(list::compare(head3, head4), 0);
+    EXPECT_GT(list::compare(head4, head3), 0);
+    list::free(head3);
+    list::free(head4);
+
+    Node* const head5 = list::from_string("");
+    EXPECT_LT(list::compare(head5, head1), 0);
+    EXPECT_GT(list::compare(head1, head5), 0);
+    list::free(head1);
+    list::free(head5);
+}
+
