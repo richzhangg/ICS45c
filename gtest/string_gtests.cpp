@@ -76,3 +76,14 @@ TEST(StringTest, FindPosition) {
     String text("discover7worlds");
     EXPECT_EQ(text.indexOf('7'), 8);
 }
+
+TEST(StringClass, Concatenation) {
+    String x("areyou");
+    String y("stupid");
+    String z = x + y;
+    EXPECT_EQ(z, String("areyoustupid"));
+    z += x;
+    z += y;
+    EXPECT_EQ(z, String("areyoustupidareyoustupid"));
+}
+
