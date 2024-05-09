@@ -73,3 +73,13 @@ TEST(ListOperations, Concatenation) {
     list::free(fullWord);
 }
 
+TEST(ListTests, DeepCopying) {
+    Node* const head = list::from_string("first->second->third");
+    Node* const copied_head = list::deep_copy(head);
+    ASSERT_EQ(list::compare(head, copied_head), 0);
+    ASSERT_NE(head, copied_head);
+    ASSERT_NE(head->next, copied_head->next);
+    list::free(head);
+    list::free(copied_head);
+}
+
