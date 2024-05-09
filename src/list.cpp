@@ -83,15 +83,15 @@ int list::length(Node* head) {
 }
 
 Node* list::reverse(Node* head) {
-	if (head == nullptr || head->next == nullptr) {
-        return head;
+	Node* original = head;
+    Node* newHead = nullptr;
+    for(; original != nullptr; original=original->next) {
+        Node* newNode = new Node;
+        newNode->data = original->data;
+        newNode->next = newHead;
+        newHead = newNode;
     }
-    
-    Node* rest = reverse(head->next);
-    head->next->next = head;
-    head->next = nullptr;
-    
-    return rest;
+    return newHead;
 }
 
 Node* list::append(Node* lhs, Node* rhs) {
