@@ -127,3 +127,24 @@ TEST(ListTests, CompareStrings) {
     list::free(head5);
 }
 
+TEST(ListTests, NodeComparison) {
+    Node* const firstHead = list::from_string("Good morning");
+    Node* const secondHead = list::from_string("Good");
+    EXPECT_EQ(list::compare(firstHead, secondHead, 5), 0);
+    EXPECT_GT(list::compare(firstHead, secondHead, 20), 0);
+    EXPECT_LT(list::compare(secondHead, firstHead, 10), 0);
+    list::free(secondHead);
+
+    Node* const thirdHead = list::from_string("Good morning");
+    EXPECT_EQ(list::compare(firstHead, thirdHead, 10), 0);
+    EXPECT_EQ(list::compare(thirdHead, firstHead, 100), 0);
+    list::free(thirdHead);
+
+    Node* const fourthHead = list::from_string("Morning");
+    EXPECT_LT(list::compare(fourthHead, firstHead, 10), 0);
+    EXPECT_GT(list::compare(firstHead, fourthHead, 50), 0);
+    EXPECT_EQ(list::compare(firstHead, fourthHead, 0), 0);
+    list::free(firstHead);
+    list::free(fourthHead);
+}
+
