@@ -4,6 +4,8 @@
 using namespace std;
 using list::Node;
 
+String::String(list::Node* head) : head{head} {}
+
 String::String(const char *s) {
 	head = list::from_string(s);
 }
@@ -84,8 +86,8 @@ int String::indexOf(char c) const {
 
 // come back if error
 int String::indexOf(const String &s) const {
-	if (!head && !substring.head) return 0;
-    Node* foundNode = list::find_list(head, substring.head);
+	if (!head && !s.head) return 0;
+    Node* foundNode = list::find_list(head, s.head);
     int index = foundNode ? list::index(head, foundNode) : -1;
     return index;
 }
@@ -134,12 +136,12 @@ String::~String() {
 	list::free(head);
 }
 
-std::ostream &String::operator<<(std::ostream &out, const String &s) {
+std::ostream &operator<<(std::ostream &out, const String &s) {
 	s.print(out);
 	return out;
 }
 
-std::istream &String::operator>>(std::istream &in, String &s) {
+std::istream &operator>>(std::istream &in, String &s) {
 	s.read(in);
 	return in;
 }
