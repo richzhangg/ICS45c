@@ -87,3 +87,9 @@ TEST(StringClass, Concatenation) {
     EXPECT_EQ(z, String("areyoustupidareyoustupid"));
 }
 
+TEST(StringClass, Size) {
+    String a("");
+    EXPECT_EQ(a.size(), 0);
+    String b("areyoustupid");
+    EXPECT_EQ(b.size(), 12);
+}
