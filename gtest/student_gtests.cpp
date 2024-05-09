@@ -149,7 +149,7 @@ TEST(ListTests, NodeComparison) {
 }
 
 TEST(ListTests, FindIndex) {
-   Node* const mainHead = list::from_string("Welcome");
+   Node* const mainHead = list::from_string("areyoustupid");
    EXPECT_EQ(list::index(mainHead, mainHead), 0);
    list::free(mainHead);
 }
