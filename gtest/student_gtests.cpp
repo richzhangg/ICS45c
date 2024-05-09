@@ -34,33 +34,40 @@ TEST(ListTests, Length) {
 // Add remaining tests below. All tests should follow
 // the format of `TEST(ListTests, <TestName>)
 
-TEST(ListTests, IntentionalFailure) {
-    // This test is designed to intentionally fail to demonstrate how failures are handled.
-    // It does not depend on any specific functionality of the list implementation.
-    EXPECT_EQ(1, 2) << "This test intentionally fails by asserting that 1 equals 2.";
+TEST(ListTests, Reverse) {
+    Node* const head = list::from_string("racecar");
+    Node* const expectedReversedHead = list::from_string("racecar");
+    Node* const reversedHead = list::reverse(head);
+    EXPECT_EQ(list::compare(reversedHead, expectedReversedHead), 0);
+    list::free(head);
+    list::free(expectedReversedHead);
+    list::free(reversedHead);
+    Node* const singleElementHead = list::from_string("r");
+    Node* const reversedSingleElementHead = list::reverse(singleElementHead);
+    EXPECT_EQ(list::compare(reversedSingleElementHead, singleElementHead), 0);
+    list::free(reversedSingleElementHead);
+    list::free(singleElementHead);
 }
 
-TEST(ListTests, Reverse) {
-    // Create a list from a string
-    Node* head = list::from_string("abc");
-    
-    // Reverse the list
-    Node* reversedHead = list::reverse(head);
-    
-    // Check the reversed list content
-    ASSERT_NE(reversedHead, nullptr);
-    EXPECT_EQ(reversedHead->data, 'c');
-    Node* second = reversedHead->next;
-    ASSERT_NE(second, nullptr);
-    EXPECT_EQ(second->data, 'b');
-    Node* third = second->next;
-    ASSERT_NE(third, nullptr);
-    EXPECT_EQ(third->data, 'a');
-    
-    // Ensure the list ends here
-    EXPECT_EQ(third->next, nullptr);
-    
-    // Free the reversed list
-    list::free(reversedHead);
+TEST(ListChecks, Concatenating) {
+    Node* const alpha = list::from_string("dog");
+    Node* const beta = list::from_string("dog");
+    Node* const gamma = list::append(alpha, beta);
+    Node* const delta = list::append(alpha, alpha);
+    ASSERT_EQ(list::compare(gamma, delta), 0);
+    list::free(alpha);
+    list::free(beta);
+    list::free(gamma);
+    list::free(delta);
+    Node* const epsilon = list::from_string("cat");
+    Node* const zeta = list::from_string("meow");
+    Node* const eta = list::append(epsilon, zeta);
+    Node* const theta = list::from_string("meowcat");
+    ASSERT_EQ(list::compare(eta, theta), 0);
+    list::free(epsilon);
+    list::free(zeta);
+    list::free(eta);
+    list::free(theta);
 }
+
 

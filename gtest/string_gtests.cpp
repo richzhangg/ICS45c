@@ -53,3 +53,21 @@ TEST(StringClass, Assignment) {
     EXPECT_EQ(s, String());
     EXPECT_EQ(s.size(), 0);
 }
+
+TEST(StringClass, Bounds) {
+    String s("universe");
+    ASSERT_EQ(s.in_bounds(0), true);
+    ASSERT_EQ(s.in_bounds(7), true);
+    ASSERT_EQ(s.in_bounds(8), false);
+    ASSERT_EQ(s.in_bounds(-1), false);
+}
+
+TEST(StringClass, Reverse) {
+    String original("RICHARDZHANG");
+    String reversed = original.reverse();
+    String reversedTwice = original.reverse();
+
+    EXPECT_EQ(reversedTwice, reversed);
+}
+
+
