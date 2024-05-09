@@ -62,7 +62,7 @@ TEST(ListOperations, Concatenation) {
     list::free(doubleX);
 
     Node* nodeAlpha = list::from_string("alpha");
-    Node* nodeBeta = list::from_string("beta");
+    Node* nodeBeta = list::from_string("bet");
     Node* concatenatedAlphaBeta = list::append(nodeAlpha, nodeBeta);
     Node* fullWord = list::from_string("alphabet");
 
