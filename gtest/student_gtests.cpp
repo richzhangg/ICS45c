@@ -129,7 +129,7 @@ TEST(ListTests, CompareStrings) {
 
 TEST(ListTests, NodeComparison) {
     Node* const firstHead = list::from_string("Good morning");
-    Node* const secondHead = list::from_string("Good");
+    Node* const secondHead = list::from_string("Good mo");
     EXPECT_EQ(list::compare(firstHead, secondHead, 5), 0);
     EXPECT_GT(list::compare(firstHead, secondHead, 20), 0);
     EXPECT_LT(list::compare(secondHead, firstHead, 10), 0);
