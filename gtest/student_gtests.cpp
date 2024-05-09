@@ -81,4 +81,15 @@ TEST(ListTests, Cloning) {
     list::free(cloned);
 }
 
-
+TEST(ListTests, CharFinding) {
+    Node* const a = list::from_string("areyoustupid");
+    Node* b = list::find_char(a, 'r');
+    Node* c = list::find_char(a, 'y');
+    Node* d = list::find_char(a, 'o');
+    Node* e = list::find_char(a, 'z');
+    EXPECT_EQ(b->data, 'r');
+    EXPECT_EQ(c->data, 'y');
+    EXPECT_EQ(d->data, 'o');
+    EXPECT_EQ(e, nullptr);
+    list::free(a);
+}
