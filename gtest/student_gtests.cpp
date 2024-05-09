@@ -49,25 +49,26 @@ TEST(ListTests, Reverse) {
     list::free(singleElementHead);
 }
 
-TEST(ListChecks, Concatenating) {
-    Node* const alpha = list::from_string("dog");
-    Node* const beta = list::from_string("dog");
-    Node* const gamma = list::append(alpha, beta);
-    Node* const delta = list::append(alpha, alpha);
-    ASSERT_EQ(list::compare(gamma, delta), 0);
-    list::free(alpha);
-    list::free(beta);
-    list::free(gamma);
-    list::free(delta);
-    Node* const epsilon = list::from_string("cat");
-    Node* const zeta = list::from_string("meow");
-    Node* const eta = list::append(epsilon, zeta);
-    Node* const theta = list::from_string("meowcat");
-    ASSERT_EQ(list::compare(eta, theta), 0);
-    list::free(epsilon);
-    list::free(zeta);
-    list::free(eta);
-    list::free(theta);
+TEST(ListTests, Appending) {
+    Node* const a = list::from_string("i");
+    Node* const b = list::from_string("i");
+    Node* const c = list::append(a, b);
+    Node* const d = list::append(a, a);
+
+    EXPECT_EQ(list::compare(c, d), 0);
+    list::free(a);
+    list::free(b);
+    list::free(c);
+    list::free(d);
+
+    Node* const e = list::from_string("some");
+    Node* const f = list::from_string("thing");
+    Node* const g = list::append(e, f);
+    Node* const h = list::from_string("something");
+
+    EXPECT_EQ(list::compare(g, h), 0);
+    list::free(e);
+    list::free(f);
+    list::free(g);
+    list::free(h);
 }
-
-
