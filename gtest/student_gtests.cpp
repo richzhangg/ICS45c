@@ -114,7 +114,7 @@ TEST(ListTests, CompareStrings) {
     list::free(head2);
 
     Node* const head3 = list::from_string("orange");
-    Node* const head4 = list::from_string("banana");
+    Node* const head4 = list::from_string("oranges");
     EXPECT_LT(list::compare(head3, head4), 0);
     EXPECT_GT(list::compare(head4, head3), 0);
     list::free(head3);
