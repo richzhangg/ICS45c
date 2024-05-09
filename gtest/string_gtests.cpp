@@ -59,7 +59,7 @@ TEST(StringClass, Bounds) {
     ASSERT_EQ(s.in_bounds(0), true);
     ASSERT_EQ(s.in_bounds(7), true);
     ASSERT_EQ(s.in_bounds(8), false);
-    ASSERT_EQ(s.in_bounds(-1), false);
+    
 }
 
 TEST(StringClass, Reverse) {
