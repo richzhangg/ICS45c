@@ -93,3 +93,16 @@ TEST(ListTests, CharFinding) {
     EXPECT_EQ(e, nullptr);
     list::free(a);
 }
+
+TEST(ListTests, Print) {
+    stringstream nonEmptyOutput;
+    Node* const nonEmptyList = list::from_string("um ok");
+    list::print(nonEmptyOutput, nonEmptyList);
+    EXPECT_EQ("um ok", nonEmptyOutput.str());
+    list::free(nonEmptyList);
+    stringstream emptyOutput;
+    Node* const emptyList = list::from_string("");
+    list::print(emptyOutput, emptyList);
+    EXPECT_EQ("", emptyOutput.str());
+    list::free(emptyList);
+}
