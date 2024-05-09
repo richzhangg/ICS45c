@@ -70,4 +70,9 @@ TEST(StringClass, Reverse) {
     EXPECT_EQ(reversedTwice, reversed);
 }
 
-
+TEST(StringTest, FindPosition) {
+    String blank("");
+    EXPECT_EQ(blank.indexOf('7'), -1);
+    String text("discover7worlds");
+    EXPECT_EQ(text.indexOf('7'), 8);
+}
