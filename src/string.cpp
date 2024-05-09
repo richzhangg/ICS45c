@@ -1,47 +1,30 @@
-#include "string.hpp"
 #include <iostream>
-
-
+#include "string.hpp"
+#include "list.hpp"
 using namespace std;
-using list::Node;
 
+String::String(const char *s) : head{list::from_string(s)} {}
 
-String::String(const char* s) {
-    head = list::from_string(s);
-}
+String::String(const String &s) : head{list::copy(s.head)} {}
 
-String::String(const String& s) {
-    head = list::copy(s.head);
-}
-
-String::String(String&& s) {
-    head = s.head;
-    s.head = nullptr;
-}
-
-String::~String() {
-    list::free(head);
-}
-
-void String::print(std::ostream& out) const {
-    list::print(out, head);
-}
+String::String(String &&s) : head(s.head) {s.head = nullptr;}
 
 void String::swap(String &s) {
-    Node* temp = head;
+    list::Node* p = head;
     head = s.head;
-    s.head = temp;
+    s.head = p;
+    p = nullptr;
 }
 
-String& String::operator=(const String& s) {
-    if (this==&s) return *this;
-    list::free(head);
-    head = copy(s.head);
+String &String::operator=(const String &s) {
+    if (&s == this) return *this;
+    if (head) list::free(head);
+    head = list::copy(s.head);
     return *this;
 }
 
-String& String::operator=(String&& s) {
-    if (this==&s) return *this;
+String &String::operator=(String &&s) {
+    if (&s == this) return *this;
     list::free(head);
     head = s.head;
     s.head = nullptr;
@@ -49,78 +32,78 @@ String& String::operator=(String&& s) {
 }
 
 bool String::in_bounds(int index) const {
-    return (list::nth(head, index));
+    return index >= 0 && index < size();
 }
 
 char String::operator[](int index) const {
-    Node* c = list::nth(head, index);
-    if (c!=nullptr)
-        return c->data;
-    cout << "ERROR" << endl;
-    return '\0';
+    if (in_bounds(index)) {
+        list::Node* p = list::nth(head, index);
+        return p->data;
+    } else {
+        cout << "ERROR: Index out of bounds ";
+        return !head ? '\0' : head->data;
+    }
 }
 
-int String::size() const {
-    return (list::length(head));
+int String::size() const {return list::length(head);}
+
+String String::reverse() const {
+    list::Node* reverseCopyHead{list::reverse(head)};
+    return String{reverseCopyHead};
 }
 
-void String::read(std::istream& in) {
-    char tempbuf[1024];
-    in >> tempbuf;
-
-    Node* k = list::from_string(tempbuf);
-    Node* l = list::last(head);
-    if (l!=nullptr) l->next = k;
-    else head = k;
+int String::indexOf(char c) const {
+    if (!head && !c) return 0;
+    list::Node* p = list::find_char(head, c);
+    return !p ? -1 : list::index(head, p);
 }
 
-std::ostream& operator<<(std::ostream& out, const String& s) {
+int String::indexOf(const String &s) const {
+    if (!head && !s.head) return 0;
+    list::Node* p = list::find_list(head, s.head);
+    return !p ? -1 : list::index(head, p);
+}
+
+
+bool String::operator==(const String& s) const {return list::compare(head, s.head) == 0;}
+
+strong_ordering String::operator<=>(const String &s) const {
+    return list::compare(head, s.head) <=> 0;
+}
+
+String String::operator+(const String& s) const {
+    String newString{list::append(head, s.head)};
+    return newString;
+}
+
+String &String::operator+=(const String& s) {
+    list::Node* end = list::last(head);
+    list::Node* sCopy = list::copy(s.head);
+    end->next = sCopy;
+    return *this;
+}
+
+void String::print(ostream &out) const {
+    list::print(out, head);
+}
+
+void String::read(istream &in) {
+    if (head) list::free(head);
+    char p[1024];
+    in >> p;
+    head = list::from_string(p);
+}
+
+String::~String() {list::free(head);}
+
+String::String(list::Node* head) : head{head} {}
+
+ostream &operator<<(ostream &out, const String &s) {
     s.print(out);
     return out;
 }
 
-std::istream& operator>>(std::istream& in, String& s) {
+istream &operator>>(istream &in, String &s) {
     s.read(in);
     return in;
 }
-
-int String::indexOf(char c) const {
-    Node* f = list::find_char(head, c);
-    int k = list::index(head, f);
-    return k;
-}
-
-int String::indexOf(const String& s) const {
-    if (s.head==nullptr) return 0;
-    Node* f = list::find_list(head, s.head);
-    int k = list::index(head, f);
-    return k;
-}
-
-bool String::operator==(const String& s) const {
-    return (list::compare(head, s.head)==0);
-}
-
-std::strong_ordering String::operator<=>(const String& s) const {
-    return (list::compare(head, s.head) <=> 0);
-}
-
-String String::reverse() const {
-    Node* r = list::reverse(head);
-    String s("");
-    s.head = r;
-    return s;
-}
-
-String String::operator+(const String& s) const {
-    String added("");
-    added.head = list::append(head, s.head);
-    return added;
-}
-
-String& String::operator+=(const String& s) {
-    Node* l = list::last(head);
-    l->next = list::copy(s.head);
-    return *this;
-}
-
