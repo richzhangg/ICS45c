@@ -148,3 +148,8 @@ TEST(ListTests, NodeComparison) {
     list::free(fourthHead);
 }
 
+TEST(ListTests, FindIndex) {
+   Node* const mainHead = list::from_string("Welcome");
+   EXPECT_EQ(list::index(mainHead, mainHead), 0);
+   list::free(mainHead);
+}
