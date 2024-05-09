@@ -140,7 +140,7 @@ TEST(ListTests, NodeComparison) {
     EXPECT_EQ(list::compare(thirdHead, firstHead, 50), 0);
     list::free(thirdHead);
 
-    Node* const fourthHead = list::from_string("Morning");
+    Node* const fourthHead = list::from_string("");
     EXPECT_LT(list::compare(fourthHead, firstHead, 6), 0);
     EXPECT_GT(list::compare(firstHead, fourthHead, 20), 0);
     EXPECT_EQ(list::compare(firstHead, fourthHead, 0), 0);
