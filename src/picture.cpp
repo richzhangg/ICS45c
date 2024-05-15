@@ -6,8 +6,7 @@ Picture::Picture() : head(nullptr), tail(nullptr) {}
 
 
 Picture::~Picture() {
-    ListNode* current = head;
-    while (current != nullptr) {
+	for (ListNode* current = head; current != nullptr; ) {
         ListNode* next = current->next;
         delete current->shape;
         delete current;
