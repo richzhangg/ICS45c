@@ -11,7 +11,7 @@ public:
 protected:
     Square(const Square& other) = default;
 
-private:  
+private:
 };
 
 #endif
