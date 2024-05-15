@@ -35,13 +35,10 @@ void Picture::swap(Picture& other) {
 }
 
 Picture& Picture::operator=(const Picture& other) {
-	if (this != &other) {
-        Picture curr(other);
-        swap(curr);
-    }
+    Picture curr(other);
+    swap(curr);
     return *this;
 }
-
 
 Picture& Picture::operator=(Picture&& other) {
 	swap(other);
@@ -49,16 +46,16 @@ Picture& Picture::operator=(Picture&& other) {
 }
 
 void Picture::add(const Shape& shape) {
-    ListNode* newNode = new ListNode;
-    newNode->shape = shape.clone();
-    newNode->prev = nullptr;
-    newNode->next = head;
-    if (head != nullptr) {
-        head->prev = newNode;
+    Shape* a = shape.clone();
+    ListNode* new_node = new ListNode(a, tail, nullptr);
+
+    if (!head) {
+        head = new_node;
     } else {
-        tail = newNode;
+        tail->next = new_node;
     }
-    head = newNode;
+
+    tail = new_node;
 }
 
 
