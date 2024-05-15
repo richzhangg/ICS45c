@@ -60,11 +60,9 @@ void Picture::add(const Shape& shape) {
 
 
 void Picture::print_all(std::ostream& out) const {
-    ListNode* current = head;
-    while (current != nullptr) {
-        current->shape->print(out);
-        current->shape->draw(out);
-        current = current->next;
+   for(ListNode *curr = tail; curr != nullptr; curr=curr->prev) {
+        curr->shape->print(out);
+        curr->shape->draw(out);
     }
 }
 
