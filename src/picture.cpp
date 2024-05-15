@@ -60,7 +60,7 @@ void Picture::add(const Shape& shape) {
 
 
 void Picture::print_all(std::ostream& out) const {
-	ListNode* current = head;
+    ListNode* current = head;
     while (current != nullptr) {
         current->shape->print(out);
         current->shape->draw(out);
@@ -68,18 +68,24 @@ void Picture::print_all(std::ostream& out) const {
     }
 }
 
+
 void Picture::draw_all(std::ostream& out) const {
-	for(ListNode *curr = tail; curr; curr = curr->prev) {
-        curr->shape->draw(out);
+    ListNode* current = head;
+    while (current != nullptr) {
+        current->shape->draw(out);
+        current = current->next;
     }
 }
 
+
 double Picture::total_area() const {
-	double total_area = 0.0;
-    for (ListNode* node = head; node != nullptr; node = node->next) {
-        total_area += node->shape->area();
+    double total = 0.0;
+    ListNode* current = head;
+    while (current != nullptr) {
+        total += current->shape->area();
+        current = current->next;
     }
-    return total_area;
+    return total;
 }
 
 Picture::~Picture() {
