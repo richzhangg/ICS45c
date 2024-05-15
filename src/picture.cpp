@@ -15,22 +15,9 @@ Picture::~Picture() {
 }
 
 
-Picture::Picture(const Picture& other) {
-    head = tail = nullptr;
-    if (other.head != nullptr) {
-        ListNode* current = other.head;
-        while (current != nullptr) {
-			ListNode* newNode = new ListNode;
-            newNode->shape = current->shape->clone();
-            if (tail == nullptr) {
-                head = tail = newNode;
-            } else {
-                tail->next = newNode;
-                newNode->prev = tail;
-                tail = newNode;
-            }
-            current = current->next;
-        }
+Picture::Picture(const Picture& other) : head(nullptr), tail(nullptr) {
+    for (ListNode* node = other.head; node != nullptr; node = node->next) {
+        add(*(node->shape));
     }
 }
 
