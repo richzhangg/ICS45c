@@ -6,16 +6,20 @@ Picture::Picture() : head(nullptr), tail(nullptr) {}
 
 Picture::Picture(const Picture& other) {
     head = tail = nullptr;
-    ListNode* current = other.head;
-    while (current != nullptr) {
-        ListNode* newNode = new ListNode(current->shape->clone(), tail, nullptr);
-        if (tail) {
-            tail->next = newNode;
-        } else {
-            head = newNode;
+    if (other.head != nullptr) {
+        ListNode* current = other.head;
+        while (current != nullptr) {
+			ListNode* newNode = new ListNode;
+            newNode->shape = current->shape->clone();
+            if (tail == nullptr) {
+                head = tail = newNode;
+            } else {
+                tail->next = newNode;
+                newNode->prev = tail;
+                tail = newNode;
+            }
+            current = current->next;
         }
-        tail = newNode;
-        current = current->next;
     }
 }
 
