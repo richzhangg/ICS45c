@@ -69,16 +69,17 @@ void Picture::print_all(std::ostream& out) const {
 }
 
 void Picture::draw_all(std::ostream& out) const {
-	for(ListNode *node = tail; node; node = node->prev) {
-        node->shape->draw(out);
+	for(ListNode *curr = tail; curr; curr = curr->prev) {
+        curr->shape->draw(out);
     }
 }
 
 double Picture::total_area() const {
-	double total = 0;
-    for (ListNode* ptr = head; ptr; ptr = ptr->next)
-        total += ptr->shape->area();
-    return total;
+	double total_area = 0.0;
+    for (ListNode* node = head; node != nullptr; node = node->next) {
+        total_area += node->shape->area();
+    }
+    return total_area;
 }
 
 Picture::~Picture() {
