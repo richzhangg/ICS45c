@@ -49,7 +49,7 @@ Picture& Picture::operator=(Picture&& other) {
 
 
 void Picture::add(const Shape& shape) {
-    ListNode* node = new ListNode{s.clone(), nullptr};
+    ListNode* node = new ListNode{shape.clone(), nullptr};
     if (!tail) {
         head = node;
     } else {
