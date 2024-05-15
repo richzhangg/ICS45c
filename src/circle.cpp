@@ -2,8 +2,9 @@
 #include <iostream>
 #include <numbers>
 
-Circle::Circle(Point center, std::string name, int radius)
-    : Shape(center, std::move(name)), radius(radius) {}
+Circle::Circle(Point center, std::string name, int radius) : Shape(center, name) {
+    this->radius = radius;
+}
 
 double Circle::area() const {
     return std::numbers::pi * radius * radius;
@@ -19,6 +20,5 @@ void Circle::draw(std::ostream& out) const {
 }
 
 Circle* Circle::clone() const {
-    return new Circle(*this);
+	return new Circle(*this);
 }
-
