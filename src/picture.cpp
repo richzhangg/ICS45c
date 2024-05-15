@@ -49,15 +49,13 @@ Picture& Picture::operator=(Picture&& other) {
 
 
 void Picture::add(const Shape& shape) {
-    Shape* dup_shape = shape.clone();
-    if (!head) {
-        head = new Picture::ListNode(dup_shape, nullptr, nullptr);
-        tail = head;
+    ListNode* node = new ListNode{s.clone(), nullptr};
+    if (!tail) {
+        head = node;
+    } else {
+        tail->next = node;
     }
-    else {
-        tail->next = new Picture::ListNode(dup_shape, tail, nullptr);
-        tail = tail->next;
-    }
+    tail = node;
 }
 
 
