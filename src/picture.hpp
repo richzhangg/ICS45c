@@ -45,6 +45,7 @@ private:
     struct ListNode {
         Shape* shape; // the data in this ListNode
         ListNode* next; // pointer to next ListNode
+		ListNode* prev;
     };
 
     ListNode* head; // pointer to the head of our linked list
