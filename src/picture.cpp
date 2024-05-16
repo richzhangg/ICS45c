@@ -28,10 +28,11 @@ Picture::Picture(Picture&& other) : head(other.head), tail(other.tail) {
 }
 
 
-void Picture::swap(Picture& other) {
-    using std::swap;
-    swap(head, other.head);
-    swap(tail, other.tail);
+void Picture::swap(Picture &other) {
+    ListNode *h = head, *t = tail;
+    head = other.head, tail = other.tail;
+    other.head = h, other.tail = t;
+    h = nullptr, t = nullptr;
 }
 
 
