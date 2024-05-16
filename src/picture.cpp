@@ -76,10 +76,8 @@ void Picture::draw_all(std::ostream& out) const {
 
 double Picture::total_area() const {
     double total = 0.0;
-    ListNode* current = head;
-    while (current != nullptr) {
-        total += current->shape->area();
-        current = current->next;
+    for (ListNode* node = head; node != nullptr; node = node->next) {
+        total += node->shape->area();
     }
     return total;
 }
