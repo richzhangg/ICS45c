@@ -29,10 +29,14 @@ Picture::Picture(Picture&& other) : head(other.head), tail(other.tail) {
 
 
 void Picture::swap(Picture &other) {
-    ListNode *h = head, *t = tail;
-    head = other.head, tail = other.tail;
-    other.head = h, other.tail = t;
-    h = nullptr, t = nullptr;
+    ListNode *tempHead = this->head;
+    ListNode *tempTail = this->tail;
+    this->head = other.head;
+    other.head = tempHead;
+    this->tail = other.tail;
+    other.tail = tempTail;
+    tempHead = nullptr;
+    tempTail = nullptr;
 }
 
 
