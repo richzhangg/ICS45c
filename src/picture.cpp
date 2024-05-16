@@ -68,10 +68,8 @@ void Picture::print_all(std::ostream& out) const {
 
 
 void Picture::draw_all(std::ostream& out) const {
-    ListNode* current = head;
-    while (current != nullptr) {
+    for (ListNode* current = head; current != nullptr; current = current->next) {
         current->shape->draw(out);
-        current = current->next;
     }
 }
 
