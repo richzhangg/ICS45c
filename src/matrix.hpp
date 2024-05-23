@@ -26,8 +26,13 @@ public:
     }
 
     // Get number of rows / columns
-    int num_rows() const { return rows; }
-    int num_cols() const { return cols; }
+    int num_rows() const { 
+		return rows; 
+	}
+
+    int num_cols() const { 
+		return cols; 
+	}
 
     // Fill every entry of the matrix with given value 'val'
     void fill(const T& val) {
@@ -54,12 +59,8 @@ private:
 
 template <typename T>
 std::ostream& operator<<(std::ostream& out, const Matrix<T>& matrix) {
-    for (int i = 0; i < matrix.num_rows(); ++i) {
-        for (int j = 0; j < matrix.num_cols(); ++j) {
-            if (j > 0) out << ' ';
-            out << matrix[i][j];
-        }
-        out << '\n';
+    for(int i = 0; i < matrix.num_rows(); ++i) {
+        out << matrix[i] << std::endl;
     }
     return out;
 }
