@@ -22,8 +22,10 @@ public:
             buf[i] = other.buf[i];	
 	}
 
-    Array(Array&& other) noexcept : len(0), buf(nullptr) {
-    	swap(*this, other);
+    Array(Array&& other) noexcept {
+    	len = other.len;
+        buf = other.buf;
+        other.buf = nullptr;
 	}
 
 
