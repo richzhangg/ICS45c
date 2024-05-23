@@ -18,7 +18,8 @@ public:
 
     // Copy & move constructors.
     Array(const Array& other) : len{other.len}, buf{new int[other.len]} {
-    	std::copy(other.buf, other.buf + other.len, buf);
+    	for (int i = 0; i < len; ++i)
+            buf[i] = other.buf[i];	
 	}
 
     Array(Array&& other) noexcept : len(0), buf(nullptr) {
@@ -36,22 +37,16 @@ public:
 
     // Copy & move assignment.
     Array& operator=(const Array& other) {
-    if (this != &other) {
-        Array temp(other);
-        swap(*this, temp);
-    }
-    return *this;
+    	if (this != &other) {
+        	Array temp(other);
+        	swap(*this, temp);
+    	}
+    	return *this;
 	}
 
     Array& operator=(Array&& other) noexcept {
-    if (this != &other) {
-        delete[] buf;
-        len = other.len;
-        buf = other.buf;
-        other.len = 0;
-        other.buf = nullptr;
-    }
-    return *this;
+   		swap(*this, other);
+        return *this;
 	}
 
 
@@ -67,25 +62,25 @@ public:
 
     // Get a particular element of the array
     int& operator[](int index) {
-    if (!in_bounds(index)) {
-        throw std::string("Exception operator[](" + std::to_string(index) + ") Out Of Range");
-    }
-    return buf[index];
+    	if (!in_bounds(index)) {
+        	throw std::string("Exception operator[](" + std::to_string(index) + ") Out Of Range");
+    	}
+    	return buf[index];
 	}
 
 	// Get a particular element of the array
 	const int& operator[](int index) const {
-    if (!in_bounds(index)) {
-        throw std::string("Exception operator[](" + std::to_string(index) + ") Out Of Range");
-    }
-    return buf[index];
+    	if (!in_bounds(index)) {
+        	throw std::string("Exception operator[](" + std::to_string(index) + ") Out Of Range");
+    	}
+    	return buf[index];
 	}
 
     // Set every element of the array to `val`
     void fill(int val) {
-    for (int i = 0; i < len; ++i) {
-        buf[i] = val;
-    }
+    	for (int i = 0; i < len; ++i) {
+        	buf[i] = val;
+    	}
 	}
 
 
