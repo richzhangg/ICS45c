@@ -1,20 +1,27 @@
 #include "process_numbers.hpp"
+#include <iostream>
 #include <vector>
 #include <iterator>
 #include <algorithm>
-#include <fstream>
+#include <ranges>
 
 void split_odd_even(std::istream& numbers, std::ostream& odds, std::ostream& evens) {
-    std::istream_iterator<int> start(numbers), end;
-    std::vector<int> nums(start, end);
-    
+    std::vector<int> nums((std::istream_iterator<int>(numbers)), std::istream_iterator<int>());
+
     std::sort(nums.begin(), nums.end());
 
-    std::ostream_iterator<int> odds_out(odds, " ");
-    std::copy_if(nums.begin(), nums.end(), odds_out, [](int n) { return n % 2 != 0; });
-    odds << '\n';
+    std::for_each(nums.begin(), nums.end(), [&](int x) {
+        if (x % 2 != 0) {
+            odds << x << " ";
+        }
+    });
 
-    std::ostream_iterator<int> evens_out(evens, "\n");
-    std::copy_if(nums.begin(), nums.end(), evens_out, [](int n) { return n % 2 == 0; });
+    odds << std::endl;
+
+    std::for_each(nums.begin(), nums.end(), [&](int x) {
+        if (x % 2 == 0) {
+            evens << x << std::endl;
+        }
+    });
 }
 
