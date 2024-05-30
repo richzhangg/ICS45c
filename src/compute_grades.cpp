@@ -79,15 +79,23 @@ void Student::compute_grade() {
 }
 
 void Student::validate() const {
-    auto check_score = [](int score) {
-        if (score < 0 || score > 100) {
+    auto isValidScore = [](int score) {
+        bool isInvalid = score < 0 || score > 100;
+        if (isInvalid) {
             throw std::domain_error("Error: invalid percentage " + score);
         }
     };
-    std::for_each(quiz.begin(), quiz.end(), check_score);
-    std::for_each(hw.begin(), hw.end(), check_score);
-	check_score(final_score);   
+
+    for (const auto& q : quiz) {
+        isValidScore(q);
+    }
+    for (const auto& h : hw) {
+        isValidScore(h);
+    }
+
+    isValidScore(final_score);
 }
+
 
 
 std::vector<std::string> read_all_lines(std::istream& input_stream) {
