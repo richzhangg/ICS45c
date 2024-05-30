@@ -121,48 +121,35 @@ std::vector<std::string> read_all_lines(std::istream& input_stream) {
 std::istream& operator>>(std::istream& in, Student& s) {
     std::string line;
     std::vector<std::string> data;
+    while(getline(in, line)) {data.push_back(line);}
 
-    while (getline(in, line)) {
-        data.push_back(line);
-    }
-
-    std::vector<std::string> keywords{"Name", "Quiz", "HW", "Final"};
-    for (const auto& current_line : data) {
-        std::istringstream stream(current_line);
-        std::string keyword;
+    std::vector<std::string> kwds {"Name", "Quiz", "HW", "Final"};
+    
+    std::for_each(begin(data), end(data), [&](std::string line){
+        std::stringstream stream(line); std::string keyword;
         stream >> keyword;
-
-        if (std::find(keywords.begin(), keywords.end(), keyword) != keywords.end()) {
-            if (keyword == "Name") {
+        if (std::find(begin(kwds), end(kwds), keyword) != end(kwds)) {
+            if (keyword == std::string("Name")) {
                 stream >> s.first_name;
-                s.last_name.clear();
-                std::string part;
-                while (stream >> part) {
-                    if (!s.last_name.empty()) {
-                        s.last_name += " ";
-                    }
-                    s.last_name += part;
-                }
-            } else if (keyword == "Quiz") {
-                s.quiz.clear();
-                std::string str;
-                while (stream >> str) {
-                    s.quiz.push_back(std::stoi(str));
-                }
-            } else if (keyword == "HW") {
-                s.hw.clear();
-                std::string str;
-                while (stream >> str) {
-                    s.hw.push_back(std::stoi(str));
-                }
-            } else if (keyword == "Final") {
-                std::string final_str;
-                stream >> final_str;
-                s.final_score = std::stod(final_str);
+                if (!stream.eof()) s.last_name = std::string();
+                std::for_each(std::istream_iterator<std::string>(stream), {}, 
+                    [&](std::string str){s.last_name += ' ' + str;});
+            }
+            else if (keyword == std::string("Quiz")) {
+                std::for_each(std::istream_iterator<std::string>(stream), {},
+                    [&](std::string str){s.quiz.push_back(std::stoi(str));});
+            }
+            else if (keyword == std::string("HW")) {
+                std::for_each(std::istream_iterator<std::string>(stream), {},
+                    [&](std::string str){s.hw.push_back(std::stoi(str));});
+            }
+            else if (keyword == std::string("Final")) {
+                std::string string_final;
+                stream >> string_final;
+                s.final_score = std::stod(string_final);
             }
         }
-    }
-
+    });
     return in;
 }
 
