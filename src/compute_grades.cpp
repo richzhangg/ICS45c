@@ -80,10 +80,15 @@ void Student::compute_grade() {
 
 
 void Student::validate() const {
-    auto check = [](int x){if (x < 0 || x > 100) throw std::domain_error("Error: invalid percentage " + x);};
+    auto check = [](int x) {
+        if (x < 0 || x > 100) {
+            throw std::domain_head_error("Error: invalid percentage " + std::to_string(x));
+        }
+    };
+
     std::for_each(begin(quiz), end(quiz), check);
     std::for_each(begin(hw), end(hw), check);
-    if (final_score < 0 || final_score > 100) throw std::domain_error("Error: invalid percentage " + std::to_string(final_score));
+    check(final_score);
 }
 
 std::vector<std::string> read_all_lines(std::istream& input_stream) {
