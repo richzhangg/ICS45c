@@ -83,7 +83,7 @@ void Student::validate() const {
     // Lambda function for checking valid percentage range
     auto validateScore = [](int score) {
         if (score < 0 || score > 100)
-            throw std::domain_error("Error: invalid percentage " + std::to_string(score));
+            throw std::domain_error("Error: invalid percentage " + std;:to_string(score));
     };
 
     // Check each quiz score using the lambda function
@@ -97,8 +97,9 @@ void Student::validate() const {
     }
 
     // Validate final exam score directly
-    validateWhat(final_score);
+    validateScore(final_score);
 }
+
 
 std::vector<std::string> read_all_lines(std::istream& input_stream) {
     std::vector<std::string> result;
