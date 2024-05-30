@@ -78,29 +78,20 @@ void Student::compute_grade() {
     }
 }
 
-void Student::validate() const {
-    // Helper function to check range validity
-    auto range_check = [](const int& score) {
+void Student::clear() const {
+    auto check_score = [](int score) {
         if (score < 0 || score > 100) {
             throw std::domain_error("Error: invalid percentage " + std::to_string(score));
         }
     };
 
-    // Check scores for quizzes
-    for (const auto& q : quiz) {
-        range_check(q);
-    }
+    // Apply check_score to quiz and hw scores
+    std::for_each(quiz.begin(), quiz.end(), check_score);
+    std::for_each(hw.begin(), hw.end(), check_score);
 
-    // Check scores for homework
-    for (const auto& h : hw) {
-        range_check(h);
-    }
-
-    // Check the final score
-    range_check(final_score);
+    // Check final_score separately
+    check_score(final_score);
 }
-
-
 
 
 std::vector<std::string> read_all_lines(std::istream& input_stream) {
