@@ -1,163 +1,185 @@
-#include "compute_grades.hpp"
+#include <algorithm>
+#include <numeric>
+#include <cmath>
 #include <compare>
+#include <iomanip>
 #include <iosfwd>
-#include <string>
-#include <vector>
 #include <iostream>
 #include <sstream>
-#include <iterator>
-#include <iomanip>
+#include <string>
+#include <stdexcept>
+#include <vector>
+
+#include "compute_grades.hpp"
+
+std::vector<std::string> load_stream(std::istream& in) {
+    std::string line;
+    std::stringstream data;
+    std::vector<std::string> output;
+    while (getline(in, line)) {
+        if(!line.size()) {
+            output.push_back(data.str());
+            data.str(std::string());
+        } else data << line << '\n';
+    }
+    return output;
+}
 
 
-using namespace std;
-
-
+//Student validate
 void Student::validate() const {
-    for (int i : quiz)
-        if (0 > i || 100 < i) throw std::domain_error(string("Error: invalid percentage " + to_string(i)));
-    for (int i : hw)
-        if (0 > i || 100 < i) throw std::domain_error(string("Error: invalid percentage " + to_string(i)));
-
-    if (final_score < 0 || final_score > 100) throw std::domain_error(string("Error: invalid percentage " + to_string(final_score)));
+    auto check = [](int x){if (x < 0 || x > 100) throw std::domain_error("Error: invalid percentage " + x);};
+    std::for_each(begin(quiz), end(quiz), check);
+    std::for_each(begin(hw), end(hw), check);
+    if (final_score < 0 || final_score > 100) throw std::domain_error("Error: invalid percentage " + std::to_string(final_score));
 }
 
-bool Student::operator==(const Student& other) const {
-    return (first_name == other.first_name && last_name == other.last_name);
-}
 
-vector<string> get_all_lines(istream& in) {
-    vector<string> v;
-    string k;
-    while (getline(in, k)) {
-        if (k.empty()) break;
-        else v.push_back(k);
-    }
-    return v;
-}
+//Student extractor
+std::istream& operator>>(std::istream& in, Student& s) {
+    std::string line;
+    std::vector<std::string> data;
+    while(getline(in, line)) {data.push_back(line);}
 
-istream& operator>>(istream& in, Student& s) {
-    vector<string> v = get_all_lines(in);
-    // for (auto r : v) cout << r << " ";
-    // cout << endl;
-    // It is all good here.
-    string keyword;
-    for (string k : v) {
-        istringstream str(k);
-        str >> keyword;
-        int n;
-        if (keyword == "Name") {
-            str >> s.first_name;
-            str >> s.last_name;
-            string l;
-            while (str >> l) { s.last_name += (" " + l); }
+    std::vector<std::string> kwds {"Name", "Quiz", "HW", "Final"};
+    
+    std::for_each(begin(data), end(data), [&](std::string line){
+        std::stringstream stream(line); std::string keyword;
+        stream >> keyword;
+        if (std::find(begin(kwds), end(kwds), keyword) != end(kwds)) {
+            if (keyword == std::string("Name")) {
+                stream >> s.first_name;
+                if (!stream.eof()) s.last_name = std::string();
+                std::for_each(std::istream_iterator<std::string>(stream), {}, 
+                    [&](std::string str){s.last_name += ' ' + str;});
+            }
+            else if (keyword == std::string("Quiz")) {
+                std::for_each(std::istream_iterator<std::string>(stream), {},
+                    [&](std::string str){s.quiz.push_back(std::stoi(str));});
+            }
+            else if (keyword == std::string("HW")) {
+                std::for_each(std::istream_iterator<std::string>(stream), {},
+                    [&](std::string str){s.hw.push_back(std::stoi(str));});
+            }
+            else if (keyword == std::string("Final")) {
+                std::string string_final;
+                stream >> string_final;
+                s.final_score = std::stod(string_final);
+            }
         }
-        else if (keyword == "Quiz") {
-            while (str >> n) { s.quiz.push_back(n); }
-        }
-        else if (keyword == "HW") {
-            while (str >> n) { s.hw.push_back(n); }
-        }
-        else if (keyword == "Final") {
-            str >> s.final_score;
-        }
-    }
+    });
     return in;
 }
 
 
-istream& operator>>(istream& in, Gradebook& b) {
-    Student s;
-    while (in >> s) {
-        b.students.push_back(Student(s));
-        s = Student();
-    }
-    return in;
-}
-
-void Student::compute_quiz_avg() {
-    quiz_avg = 0.0;
-    double avg = 0.0;
-    int total_num = 0;
-    int min_num = 101;
-    for_each(quiz.begin(), quiz.end(), [&](int x) { avg += x; total_num++; min_num = min(x, min_num); });
-    if (total_num >= 2)
-        quiz_avg = (avg-min_num)/(total_num-1);
-    else if (total_num == 1)
-        quiz_avg = avg;
-    else if (total_num == 0)
-        quiz_avg = 0.0;
-}
-
-void Student::compute_hw_avg() {
-    double avg = 0.0;
-    int total_num = 0;
-    int min_num = 101;
-    for_each(hw.begin(), hw.end(), [&](int x) { avg += x; total_num++; min_num = min(x, min_num); });
-    if (total_num != 0) hw_avg = avg/total_num;
-    else hw_avg = 0.0;
-}
-
-void Student::compute_grade() {
-    Student::compute_quiz_avg();
-    Student::compute_hw_avg();
-    Student::compute_course_score();
-}
-
-void Student::compute_course_score() {
-    double everything = 0.0;
-    everything += ((hw_avg*0.3) + (quiz_avg*0.4) + (final_score*0.3));
-    course_score = int(everything);
-    int g = course_score;
-    if (97 <= g && g <= 100) course_grade = "A+";
-    if (93 <= g && g <= 96) course_grade = "A";
-    if (90 <= g && g <= 92) course_grade = "A-";
-    if (87 <= g && g <= 89) course_grade = "B+";
-    if (83 <= g && g <= 86) course_grade = "B";
-    if (80 <= g && g <= 82) course_grade = "B-";
-    if (77 <= g && g <= 79) course_grade = "C+";
-    if (73 <= g && g <= 76) course_grade = "C";
-    if (70 <= g && g <= 72) course_grade = "C-";
-    if (67 <= g && g <= 69) course_grade = "D+";
-    if (63 <= g && g <= 66) course_grade = "D";
-    if (60 <= g && g <= 62) course_grade = "D-";
-    if (0 <= g && g <= 59) course_grade = "F";
-
-}
-
-void Gradebook::compute_grades() {
-    for_each(students.begin(), students.end(), [](Student& s) { s.compute_grade(); });
-}
-
-strong_ordering Student::operator<=>(const Student& other) const {
-    return (last_name+first_name) <=> (other.last_name+other.first_name);
-}
-
-void Gradebook::sort() {
-    std::sort(students.begin(), students.end());
-}
-
-void Gradebook::validate() const {
-    for_each(students.begin(), students.end(), [](Student s) { s.validate(); });
-}
-
-std::ostream& operator<<(std::ostream& out, const Gradebook& b) {
-    for_each(b.students.begin(), b.students.end(), [&](Student s) { out << s << endl; });
-    return out;
-}
-
+//Student inserter
 std::ostream& operator<<(std::ostream& out, const Student& s) {
-    std::stringstream temp;
-    // We don't want to set formatting flags globally.
-    temp << std::setprecision(2) << std::fixed << std::left;
-
-    temp << left << setw(8) << "Name: " << s.first_name << " " << s.last_name << endl;
-    temp << left << setw(8) << "HW Ave: " << int(s.hw_avg) << endl;
-    temp << left << setw(8) << "QZ Ave: " << int(s.quiz_avg) << endl;
-    temp << left << setw(8) << "Final: " << int(s.final_score) << endl;
-    temp << left << setw(8) << "Total: " << int(s.course_score) << endl;
-    temp << left << setw(8) << "Grade: " << s.course_grade << endl;
-    out << temp.str();
+    out << std::left << std::setw(8) << "Name: " << s.first_name << s.last_name << '\n' <<
+           std::setw(8) << "HW Ave: " << s.hw_avg << '\n' <<
+           std::setw(8) << "QZ Ave: " << s.quiz_avg << '\n' <<
+           std::setw(8) << "Final: " << s.final_score << '\n' <<
+           std::setw(8) << "Total: " << s.course_score << '\n' <<
+           std::setw(8) << "Grade: " << s.course_grade << std::endl;
     return out;
 }
 
 
+//Compute average quiz
+void Student::compute_quiz_avg() {
+    if (!quiz.size()) quiz_avg = 0;
+    else if (quiz.size() == 1) quiz_avg = quiz[0];
+    else {
+        std::vector<int> adjustedQuiz(quiz);
+        std::sort(begin(adjustedQuiz), end(adjustedQuiz));
+        adjustedQuiz.erase(begin(adjustedQuiz), begin(adjustedQuiz)+1);
+        quiz_avg = std::accumulate(begin(adjustedQuiz), end(adjustedQuiz), 0.0) / adjustedQuiz.size() + 0.0;
+   }
+}
+
+
+//Compute average hw
+void Student::compute_hw_avg() {
+    if (!hw.size()) hw_avg = 0;
+    else hw_avg = std::accumulate(begin(hw), end(hw), 0.0) / hw.size() + 0.0;
+}
+
+
+//Compute course score
+void Student::compute_course_score() {
+    course_score = std::round(0.4 * quiz_avg + 0.3 * hw_avg + 0.3 * final_score);
+}
+
+
+//Compute letter grade
+void Student::compute_grade() {
+    compute_quiz_avg();
+    compute_hw_avg();
+    compute_course_score();
+    
+    if (97 <= course_score) course_grade = "A+";
+    else if (93 <= course_score) course_grade = "A";
+    else if (90 <= course_score) course_grade = "A-";
+    else if (87 <= course_score) course_grade = "B+";
+    else if (83 <= course_score) course_grade = "B";
+    else if (80 <= course_score) course_grade = "B-";
+    else if (77 <= course_score) course_grade = "C+";
+    else if (73 <= course_score) course_grade = "C";
+    else if (70 <= course_score) course_grade = "C-";
+    else if (67 <= course_score) course_grade = "D+";
+    else if (63 <= course_score) course_grade = "D";
+    else if (60 <= course_score) course_grade = "D-";
+    else course_grade = "F";
+}
+
+
+//Student spaceship operator
+std::strong_ordering Student::operator<=>(const Student& other) const {
+    std::strong_ordering last_name_compare = last_name.compare(other.last_name) <=> 0;
+    if (last_name_compare != 0) return last_name_compare;
+    else return first_name.compare(other.first_name) <=> 0;
+}
+
+
+//Student comparison operator
+bool Student::operator==(const Student& other) const {
+    return (last_name == other.last_name && first_name == other.first_name);
+}
+
+
+//Gradebook compute grades
+void Gradebook::compute_grades() {
+    std::for_each(begin(students), end(students), [](Student& s){s.compute_grade();});
+}
+
+
+//Gradebook validate
+void Gradebook::validate() const {
+    std::for_each(begin(students), end(students), [](const Student& s){s.validate();});
+}
+
+
+//Gradebook sort
+void Gradebook::sort() {
+    std::sort(begin(students), end(students));
+}
+
+//Gradebook extractor
+std::istream& operator>>(std::istream& in, Gradebook& b) {
+    std::vector<std::string> data {load_stream(in)};
+
+    std::for_each(begin(data), end(data), [&](std::string str){
+        std::stringstream stream;
+        stream << str;
+        Student s;
+        stream >> s;
+        b.students.push_back(s);});
+
+    return in;
+}
+
+
+//Gradebook inserter
+std::ostream& operator<<(std::ostream& out, const Gradebook& b) {
+    std::for_each(begin(b.students), end(b.students), [&](Student s){out << s << '\n';});
+    return out;
+}
