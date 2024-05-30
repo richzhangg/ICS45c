@@ -79,11 +79,10 @@ void Student::compute_grade() {
 }
 
 void Student::validate() const {
-    auto isValidScore = [this](int score) {
-        if (score < 0 || score > 100) {
-            std::ostringstream oss;
-            oss << "Error: invalid percentage " << score;
-            throw std2 domain_error(oss.str());
+    auto isValidScore = [](int score) {
+        bool isInvalid = score < 0 || score > 100;
+        if (isInvalid) {
+            throw std::domain_error("Error: invalid percentage " + score);
         }
     };
 
@@ -96,9 +95,6 @@ void Student::validate() const {
 
     isValidScore(final_score);
 }
-
-
-
 
 
 std::vector<std::string> read_all_lines(std::istream& input_stream) {
