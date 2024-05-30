@@ -15,21 +15,14 @@
 #include "compute_grades.hpp"
 
 void Student::compute_quiz_avg() {
-    if (quiz.empty()) {
-        quiz_avg = 0.0;
-    } else if (quiz.size() == 1) {
-        quiz_avg = quiz.front();
-    } else {
-        std::vector<int> sorted_quiz = quiz;
-        std::sort(sorted_quiz.begin(), sorted_quiz.end());
-        sorted_quiz.erase(sorted_quiz.begin());
-        
-        double sum = 0.0;
-        for (const int score : sorted_quiz) {
-            sum += score;
-        }
-        quiz_avg = sum / sorted_quiz.size();
-    }
+    if (!quiz.size()) quiz_avg = 0;
+    else if (quiz.size() == 1) quiz_avg = quiz[0];
+    else {
+        std::vector<int> adjustedQuiz(quiz);
+        std::sort(begin(adjustedQuiz), end(adjustedQuiz));
+        adjustedQuiz.erase(begin(adjustedQuiz), begin(adjustedQuiz)+1);
+        quiz_avg = std::accumulate(begin(adjustedQuiz), end(adjustedQuiz), 0.0) / adjustedQuiz.size() + 0.0;
+   }
 }
 
 void Student::compute_hw_avg() {
