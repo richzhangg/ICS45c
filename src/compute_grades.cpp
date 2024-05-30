@@ -82,7 +82,7 @@ void Student::validate() const {
     auto validate_range = [](const std::vector<int>& scores) {
         for (const int& score : scores) {
             if (score < 0 || score > 100) {
-                throw std::domainí_error("Error: invalid percentage " + std::to_string(score));
+                throw std::domain_error("Error: invalid percentage " + std::to_string(score));
             }
         }
     };
