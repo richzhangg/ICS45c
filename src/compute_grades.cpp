@@ -15,23 +15,22 @@
 #include "compute_grades.hpp"
 
 void Student::compute_quiz_avg() {
-    if (quiz.empty()) {
-        quiz_avg = 0;
-    } else {
-        double sum = 0.0;
-        int count = 0;
-        for (int score : quiz) {
-            sum += score;
-            ++count;
-        }
-        if (count > 1) {
-            int min_score = *min_element(quiz.begin(), quiz.end());
-            sum -= min_score;
-            --count;
-        }
-        quiz_avg = sum / count;
+    size_t quiz_count = quiz.size();
+    switch (quiz_count) {
+        case 0:
+            quiz_avg = 0;
+            break;
+        case 1:
+            quiz_avg = quiz[0];
+            break;
+        default:
+            std::vector<int> adjustedQuiz(quiz.begin() + 1, quiz.end());
+            std::sort(adjustedQuiz.begin(), adjustedQuiz.end());
+            quiz_avg = std::accumulate(adjustedQuiz.begin(), adjustedQuiz.end(), 0.0) / adjustedQuiz.size();
+            break;
     }
 }
+
 
 void Student::compute_hw_avg() {
     hw_avg = hw.empty() ? 0 : std::accumulate(hw.begin(), hw.end(), 0.0) / hw.size();
