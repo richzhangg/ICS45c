@@ -88,7 +88,7 @@ void Student::validate() const {
     // Apply check_score to quiz and hw scores
     std::for_each(quiz.begin(), quiz.end(), check_score);
     std::for_each(hw.begin(), hw.end(), check_score);
-
+	if (final_score < 0 || final_score > 100) throw std::domain_error("Error: invalid percentage " + std::to_string(final_score));
     // Check final_score separately
     check_score(final_score);
 }
