@@ -78,7 +78,7 @@ void Student::compute_grade() {
     }
 }
 
-void Student::clear() const {
+void Student::validate() const {
     auto check_score = [](int score) {
         if (score < 0 || score > 100) {
             throw std::domain_error("Error: invalid percentage " + std::to_string(score));
