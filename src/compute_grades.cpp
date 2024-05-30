@@ -80,25 +80,17 @@ void Student::compute_grade() {
 
 
 void Student::validate() const {
-    // Lambda function for checking valid percentage range
-    auto validateScore = [](int score) {
-        if (score < 0 || score > 100)
-            throw std::domain_error("Error: invalid percentage " + std;:to_string(score));
+    auto validateScore = [](int score, const std::string& context) {
+        if (score < 0 || score > 100) {
+            throw std::domain_error("Error: invalid percentage " + std::to_string(score) + " in " + context);
+        }
     };
 
-    // Check each quiz score using the lambda function
-    for (const auto& score : quiz) {
-        validateScore(score);
-    }
-
-    // Check each homework score using the lambda function
-    for (const auto& score : hw) {
-        validateScore(score);
-    }
-
-    // Validate final exam score directly
-    validateScore(final_score);
+    for (auto& q : quiz) validateScore(q, "quiz");
+    for (auto& h : hw) validateScore(h, "homework");
+    validateScore(final_score, "final score");
 }
+
 
 
 std::vector<std::string> read_all_lines(std::istream& input_stream) {
