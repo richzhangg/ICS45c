@@ -78,29 +78,22 @@ void Student::compute_grade() {
     }
 }
 
-
 void Student::validate() const {
-    auto validate_score = [](const int score) {
-        if (score < 0 || score > 100) {
-            throw std::domain_error("Error: invalid percentage " + std::to_string(score));
+    auto validate_range = [](const std::vector<int>& scores) {
+        for (const int& score : scores) {
+            if (score < 0 || score > 100) {
+                throw std::domainí_error("Error: invalid percentage " + std::to_string(score));
+            }
         }
     };
 
-    // Validate quiz scores
-    for (const int& score : quiz) {
-        validate_score(score);
+    validate_range(quiz);
+    validate_range(hw);
+    
+    if (final_score < 0 || final_score > 100) {
+        throw std::domain_error("Error: invalid percentage " + std::to_string(final_score));
     }
-
-    // Validate homework scores
-    for (const int& score : hw) {
-        validate_score(score);
-    }
-
-    // Validate final score
-    validate_score(final_score);
 }
-
-
 
 
 std::vector<std::string> read_all_lines(std::istream& input_stream) {
