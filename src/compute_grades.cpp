@@ -119,45 +119,42 @@ std::vector<std::string> read_all_lines(std::istream& input_stream) {
 
 
 std::istream& operator>>(std::istream& in, Student& s) {
-    std::string line;
-    std::vector<std::string> data;
-    
-    while(getline(in, line)) { data.push_back(line); }
+    std::vector<std::string> lines;
+    std::string temp;
+    while(getline(in, temp)) {lines.push_back(temp);}
 
-    std::unordered_map<std::string, std::function<void(std::stringstream&)>> actions {
-        {"Name", [&](std::stringstream& stream) {
-            std::string name_part;
+    std::unordered_map<std::string, std::function<void(std::istringstream&)>> actions {
+        {"Name", [&](std::istringstream& stream){
             stream >> s.first_name;
-            while (stream >> name_part) { s.last_name += ' ' + name_part; }
+            if (!stream.eof()) s.last_name = std::string();
+            std::for_each(std::istream_iterator<std::string>(stream), {}, 
+                [&](std::string str){s.last_name += ' ' + str;});
         }},
-        {"Quiz", [&](std::stringstream& stream) {
+        {"Quiz", [&](std::istringstream& stream){
             std::for_each(std::istream_iterator<std::string>(stream), {},
-                [&](std::string str) { s.quiz.push_back(std::stoi(str)); });
+                [&](std::string str){s.quiz.push_back(std::stoi(str));});
         }},
-        {"HW", [&](std::stringstream& stream) {
+        {"HW", [&](std::istringstream& stream){
             std::for_each(std::istream_iterator<std::string>(stream), {},
-                [&](std::string str) { s.hw.push_back(std::stoi(str)); });
+                [&](std::string str){s.hw.push_back(std::stoi(str));});
         }},
-        {"Final", [&](std::stringstream& stream) {
+        {"Final", [&](std::istringstream& stream){
             std::string string_final;
             stream >> string_final;
             s.final_score = std::stod(string_final);
         }}
     };
     
-    for (const auto& line : data) {
-        std::stringstream stream(line);
-        std::string keyword;
+    std::for_each(begin(lines), end(lines), [&](std::string line){
+        std::istringstream stream(line); std::string keyword;
         stream >> keyword;
-        
-        auto action_iter = actions.find(keyword);
-        if (action_iter != actions.end()) {
-            action_iter->second(stream);
-        }
-    }
+        auto action = actions.find(keyword);
+        if (action != actions.end()) action->second(stream);
+    });
     
     return in;
 }
+
 
 std::istream& operator>>(std::istream& in, Gradebook& b) {
     std::vector<std::string> data = read_all_lines(in);
