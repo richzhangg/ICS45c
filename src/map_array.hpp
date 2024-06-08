@@ -53,12 +53,12 @@ public:
         }
 
         friend ArrayIterator operator+(ArrayIterator it, difference_type d) {
-            return ArrayIterator(it.ptr + d);
+            return it += d;
         }
 
         friend ArrayIterator operator+(difference_type d, ArrayIterator it) {
-            return ArrayIterator(it.ptr + d);
-        }
+			return ArrayIterator(it.ptr + d);
+		}
 
         friend ArrayIterator operator-(ArrayIterator it, difference_type d) {
             return ArrayIterator(it.ptr - d);
@@ -70,45 +70,44 @@ public:
 
         auto operator<=>(const ArrayIterator& other) const = default;
 
-        reference operator*() const {
+        std::pair<Key, Value>& operator*() const {
             return *ptr;
         }
 
-        pointer operator->() const {
+        std::pair<Key, Value>* operator->() const {
             return ptr;
         }
 
-        reference operator[](difference_type d) const {
+        std::pair<Key, Value>& operator[](difference_type d) const {
             return *(ptr + d);
         }
 
     private:
-        pointer ptr;
+        std::pair<Key, Value>* ptr;
     };
 
     using iterator = ArrayIterator;
     using value_type = std::pair<Key, Value>;
 
-    iterator begin() {
-        return iterator(data.data());
-    }
+    ArrayIterator begin() {
+    return data.empty() ? ArrayIterator() : ArrayIterator(&data[0]);
+	}
 
-    iterator end() {
+
+    ArrayIterator end() {
         return iterator(data.data() + data.size());
     }
 
     Value& operator[](const Key& key) {
-    auto it = std::lower_bound(begin(), end(), std::make_pair(key, Value{}),
-                               [](const value_type& a, const value_type& b) { return a.first < b.first; });
-
-    auto index = it - begin();
-
-    if (it == end() || it->first != key) {
-        data.insert(data.begin() + index, std::make_pair(key, Value{}));
-        it = begin() + index;
+    auto comparator = [](const value_type& a, const value_type& b) { return a.first < b.first; };
+    auto it = std::lower_bound(data.begin(), data.end(), std::make_pair(key, Value{}), comparator);
+    if (it == data.end() || it->first != key) {
+        it = data.insert(it, std::make_pair(key, Value{}));
     }
     return it->second;
-}
+	}
+
+
 
 
 private:

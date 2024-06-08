@@ -20,8 +20,8 @@ public:
         using iterator_category = std::forward_iterator_tag;
         using value_type = T;
         using difference_type = std::ptrdiff_t;
-        using pointer = value_type*;
-        using reference = value_type&;
+        using pointer = T*;
+        using reference = T&;
 
         explicit ListIterator(std::shared_ptr<ListNode> ptr = nullptr) : ptr(ptr) {}
 
