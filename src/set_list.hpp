@@ -20,13 +20,13 @@ public:
         using iterator_category = std::forward_iterator_tag;
         using value_type = T;
         using difference_type = std::ptrdiff_t;
-        using pointer = T*;
-        using reference = T&;
+        using pointer = value_type*;
+        using reference = value_type&;
 
         explicit ListIterator(std::shared_ptr<ListNode> ptr = nullptr) : ptr(ptr) {}
 
         ListIterator& operator++() {
-            if (ptr) ptr = ptr->next;
+            ptr = ptr->next;
             return *this;
         }
 
@@ -44,13 +44,7 @@ public:
             return &(ptr->data);
         }
 
-        bool operator==(const ListIterator& other) const {
-            return ptr == other.ptr;
-        }
-
-        bool operator!=(const ListIterator& other) const {
-            return !(*this == other);
-        }
+        bool operator==(const ListIterator& other) const = default;
 
     private:
         std::shared_ptr<ListNode> ptr;
@@ -68,30 +62,40 @@ public:
             std::bind_front(&SetList::insert, this));
     }
 
-    iterator begin() {
-        return iterator(head);
+    ListIterator begin() {
+        return ListIterator(head);
     }
 
-    iterator end() {
-        return iterator(nullptr);
+    ListIterator end() {
+        return ListIterator(nullptr);
     }
 
     bool contains(const T& value) {
-        for (auto node = head; node != nullptr; node = node->next) {
-            if (node->data == value) {
+    for (auto current = head; current != nullptr; ) {
+        if (current->data == value) {
+            return true;
+        }
+        current = current->next;
+    }
+    return false;
+	}
+
+    ListIterator insert(T value) {
+    auto containsValue = [this, &value]() -> bool {
+        for (auto current = head; current != nullptr; current = current->next) {
+            if (current->data == value) {
                 return true;
             }
         }
         return false;
+    };
+
+    if (!containsValue()) {
+        head = std::make_shared<ListNode>(ListNode{std::move(value), head});
     }
 
-    iterator insert(T value) {
-    if (!contains(value)) {
-        auto newNode = std::make_shared<ListNode>(ListNode{std::move(value), head});
-        head = std::move(newNode);
-    }
-    return begin();
-	}
+    return ListIterator(head);
+}
 
 
 private:
